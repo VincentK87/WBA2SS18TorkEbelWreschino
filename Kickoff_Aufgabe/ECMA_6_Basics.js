@@ -1,7 +1,8 @@
 require('isomorphic-fetch');
 
 var tId = "567491918";
-getTweets(tId);
+// getTweets(tId);
+Aufgabe3();
 
 // Aufgabe 1
 function Aufgabe1() {
@@ -30,4 +31,14 @@ function getTweets(id) {
 				return tweet.rts > 50 
 		}); 
 	});
+}
+
+// Aufgabe 3
+function Aufgabe3() {
+	let array = [4, 1];
+	console.log(sortInteger(array));
+}
+
+function sortInteger(data){
+	return data.sort();
 }
