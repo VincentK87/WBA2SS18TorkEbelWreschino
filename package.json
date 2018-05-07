@@ -15,5 +15,8 @@
   "bugs": {
     "url": "https://github.com/plunata/WBA2SS18TorkEbelWreschino/issues"
   },
-  "homepage": "https://github.com/plunata/WBA2SS18TorkEbelWreschino#readme"
+  "homepage": "https://github.com/plunata/WBA2SS18TorkEbelWreschino#readme",
+  "dependencies": {
+    "express": "^4.16.3"
+  }
 }
