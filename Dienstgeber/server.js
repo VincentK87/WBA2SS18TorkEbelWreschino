@@ -26,6 +26,8 @@ server.listen(serverSettings.port, function(){
 	console.log("App listening at %s:%s", serverSettings.host, serverSettings.port);
 });
 
+games.loadData();
+
 process.on("SIGINT", onExit);
 
 function onExit(){
