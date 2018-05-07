@@ -1,0 +1,19 @@
+{
+  "name": "wba2ss18torkebelwreschino",
+  "version": "1.0.0",
+  "description": "wba2 projekt",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/plunata/WBA2SS18TorkEbelWreschino.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/plunata/WBA2SS18TorkEbelWreschino/issues"
+  },
+  "homepage": "https://github.com/plunata/WBA2SS18TorkEbelWreschino#readme"
+}

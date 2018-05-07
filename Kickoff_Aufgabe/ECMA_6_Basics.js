@@ -1,8 +1,10 @@
 require('isomorphic-fetch');
 
 var tId = "567491918";
-// getTweets(tId);
-Aufgabe3();
+
+Aufgabe1();
+//getTweets(tId);
+//Aufgabe3();
 
 // Aufgabe 1
 function Aufgabe1() {
@@ -15,7 +17,7 @@ function Aufgabe1() {
 }
 
 // Aufgabe 2
-function getTweets(id) { 
+function getTweets(id) {
 	return fetch("https://api.twitter.com/user/" + id)
 		.then( function(response) {
 			return JSON.parse(response);
