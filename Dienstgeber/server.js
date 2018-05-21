@@ -39,10 +39,9 @@ groups.loadData();
 process.on("SIGINT", onExit);
 
 function onExit(){
-	SaveDatabase(function() {
-		console.log("Server shutdown");
-		process.exit();
-	});
+	//SaveDatabase();
+	console.log("Server shutdown");
+	process.exit();
 }
 
 function SaveDatabase(){
