@@ -45,8 +45,22 @@ router.post('/', function(req, res){
 });
 
 router.get('/', function(req, res){
-	res.send(allGroups);
-	process.exit();    										// TODO
+	var tag = req.query.tag;
+	if(tag == undefined){
+		res.send(allGroups);
+	} else {
+		
+		var TagList = [];
+		allGroups.forEach(function(element){
+			element.tags.forEach(function(elem){
+				if(elem == tag){
+					TagList.push(element);
+					return;
+				}
+			});
+		});
+		res.send(TagList);
+	}
 });
 
 router.get('/:groupID', function(req, res){
@@ -86,15 +100,6 @@ router.delete('/:groupID', function(req, res) {
 		delete group;
 		res.sendStatus(200);
 	}
-});
-
-router.get('/?tag', function(req, res){
-	var TagList;
-	allGroups.forEach(function(element){
-		console.log(element.name);
-	});
-	res.send(TagList);
-
 });
 
 /**************************
