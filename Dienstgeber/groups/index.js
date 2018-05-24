@@ -6,22 +6,22 @@ const router = express.Router();
 const dbPath = "/groups.json";
 
 var allGroups;
+var lastId;
 
 
 /**************************
  * Object
 **************************/
 function Group(name, game, vor, tags) {
-	if(allGroups.length == 0)
-		this.id = 0;
-	else
-		this.id = allGroups[0].id++;
+	this.id = lastId;
 	this.name = name;
 	this.mitglieder = [];
 	this.warteliste = [];
 	this.game = game;
 	this.voraussetzungen = vor;
 	this.tags = tags;
+
+	lastId++;
 }
 
 Group.prototype.info = function() {
@@ -34,12 +34,12 @@ Group.prototype.info = function() {
 router.post('/', function(req, res){
 	var group = req.body;
 	if(!checkIsValidForm(group)){
-		res.sendStatus(204);
+		res.sendStatus(406);
 	}
 	else {
 		var newGroup = new Group(group.name, group.game, group.voraussetzungen, group.tags);
 		allGroups.push(newGroup);
-	
+		
 		res.send(newGroup);
 	}
 });
@@ -59,7 +59,10 @@ router.get('/', function(req, res){
 				}
 			});
 		});
-		res.send(TagList);
+		if(TagList.length == 0){
+			res.sendStatus(404);
+		} else 
+			res.send(TagList);
 	}
 });
 
@@ -72,9 +75,9 @@ router.get('/:groupID', function(req, res){
 });
 
 router.put('/:groupID', function(req, res){
-	var info = res.body;
+	var info = req.body;
 	if(!checkIsValidForm(info)){
-		res.sendStatus(204);
+		res.sendStatus(406);
 	}
 	else {
 		var group = getGroupById(req.params.groupID)
@@ -91,33 +94,45 @@ router.put('/:groupID', function(req, res){
 });
 
 router.delete('/:groupID', function(req, res) {
-	var group = getGroupById(req.params.groupID);
+	var obj = getGroupById(req.params.groupID);
 	
-	if(group == undefined){
-		res.sendStatus(404);
+	if(obj == undefined){
+		res.sendStatus(204);
+		return;
 	}
-	else {
-		delete group;
+	
+	var index = allGroups.indexOf(obj);
+	if (index > -1) {
+		allGroups.splice(index, 1);
 		res.sendStatus(200);
-	}
+	};
+
 });
 
 /**************************
  * Functions
 **************************/
+
 function loadDatabase() {
 	fs.readFile(__dirname + dbPath, function(err, data){
 		if(data.length == 0){
 			console.log("file was empty");
 			allGroups = [];
+			lastId = 0;
 		}
-		else
-			allGroups = JSON.parse(data);
+		else {
+			var parseInfo = JSON.parse(data);
+			allGroups = parseInfo.data;
+			lastId = parseInfo.lastId;
+		}
 	});
 };
 
 function saveDatabase(){
-	fs.writeFile(__dirname + dbPath, JSON.stringify(allGroups), function(err){
+	var saveObj = {};
+	saveObj.data = allGroups;
+	saveObj.lastId = lastId;
+	fs.writeFile(__dirname + dbPath, JSON.stringify(saveObj), function(err){
 		console.log("success saving file");
 	});	
 }
@@ -128,9 +143,14 @@ function getGroupById(id) {
 	});
 }
 
-function checkIsValidForm(){
-	// TODO
-	return true;
+function checkIsValidForm(data) {
+	if(data == undefined)
+		return false;
+	if(data.name != undefined && data.game != undefined && data.voraussetzungen != undefined && data.mitglieder != undefined && data.warteliste != undefined ) 
+	{
+		return true;
+	}
+	return false
 }
 /**************************
  * export

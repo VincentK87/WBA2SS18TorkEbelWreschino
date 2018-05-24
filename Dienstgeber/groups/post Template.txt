@@ -1,8 +1,10 @@
 {
-	"name": "test123",
-	"game": "12512",
-	"voraussetzungen": "keine",
+	"name": "newName",
+	"game": "123",
+	"voraussetzungen": "+++++",
+	"mitglieder": [],
+	"warteliste": [],
 	"tags": [
-		"tet", "lel", "mem"
+		"sadasd", "sad", "test"
 	]
 }

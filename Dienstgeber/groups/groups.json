@@ -1,1 +1,53 @@
-[{"id":4,"name":"test123","mitglieder":[],"warteliste":[],"game":"12512","voraussetzungen":"keine","tags":["tet","lel","OOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO"]},{"id":0,"name":"test123","mitglieder":[],"warteliste":[],"game":"12512","voraussetzungen":"keine","tags":["tet","lel","OOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO"]},{"id":1,"name":"test123","mitglieder":[],"warteliste":[],"game":"12512","voraussetzungen":"keine","tags":["tet","lel","OOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO"]},{"id":2,"name":"test123","mitglieder":[],"warteliste":[],"game":"12512","voraussetzungen":"keine","tags":["tet","lel","OOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO"]},{"id":3,"name":"test123","mitglieder":[],"warteliste":[],"game":"12512","voraussetzungen":"keine","tags":["tet","lel","OOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO"]}]
+{
+	"data": [{
+			"id": 0,
+			"name": "gruppe0",
+			"mitglieder": [],
+			"warteliste": [],
+			"game": "12512",
+			"voraussetzungen": "keine",
+			"tags": [
+				"gruppe4",
+				"1"
+			]
+		},
+		{
+			"id": 1,
+			"name": "gruppe1",
+			"mitglieder": [],
+			"warteliste": [],
+			"game": "12512",
+			"voraussetzungen": "keine",
+			"tags": [
+				"1",
+				"gruppe4",
+				"test"
+			]
+		},
+		{
+			"id": 2,
+			"name": "gruppe2",
+			"mitglieder": [],
+			"warteliste": [],
+			"game": "12512",
+			"voraussetzungen": "keine",
+			"tags": [
+				"11",
+				"22",
+				"33"
+			]
+		},
+		{
+			"id": 3,
+			"name": "gruppe3",
+			"mitglieder": [],
+			"warteliste": [],
+			"game": "12512",
+			"voraussetzungen": "keine",
+			"tags": [
+				"test"
+			]
+		}
+	],
+	"lastId": 4
+}
