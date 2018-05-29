@@ -47,6 +47,7 @@ function onExit(){
 	process.exit();
 }
 
-function SaveDatabase(){
+function saveDatabase(){
 	groups.saveData();
+	users.saveData();
 }

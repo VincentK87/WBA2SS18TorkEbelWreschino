@@ -21,6 +21,7 @@ function User(name, nachname, username, games) {
     this.games = games;
 
     lastUserId++;
+    // To Do: Bessere ID-Loesung finden!
  }
 
  User.prototype.info = function() {
@@ -32,9 +33,9 @@ function User(name, nachname, username, games) {
  ****************************/
 
 router.post('/', function(req, res){
-    var users = req.body;
+    var user = req.body;
 
-    if(!checkIsValidForm(users)) {
+    if(!checkIsValidForm(user)) {
         res.sendStatus(406);
     } else {
         var newUser = new User(user.name, user.nachname, user.username, user.games);
@@ -139,9 +140,19 @@ router.post('/', function(req, res){
  };
 
 function checkIsValidForm(data) {
+    console.log(data.name);
+    console.log(data.nachname);
+    console.log(data.username);
     if(data == undefined)
         return false;
-    if(data.name != undefined && data.nachname != undefined && data.username != undefined && data.games != undefined) {
+    if(data.name != undefined && data.nachname != undefined && data.username != undefined) {
+        if (data.games.length == 0) {
+            return true;
+        } else {
+            data.games.forEach (function(element) {
+                console.log(element);
+            });
+        }
         return true;
     } else {
         return false;
@@ -161,7 +172,14 @@ module.exports = {
     },
 
     saveData : function() {
-        saveDatabase();
+        var savedObj = {};
+        saveObj.data = allUsers;
+        saveObj.lastUserId = lastUserId;
+        fs.writeFileSync(__dirname + dbPath, JSON.stringify(this.saveObj), function(err) {
+            console.log("success saving file :)");
+        });
+        
+        //saveDatabase();
     }
 
 }
