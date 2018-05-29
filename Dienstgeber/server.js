@@ -22,9 +22,11 @@ app.use(bodyParser.json())
 // scripts
 var games = require('./games/index.js');
 var groups = require('./groups/index.js');
+var users = require('./users/index.js');
 
 app.use("/games", games.router);
 app.use("/groups", groups.router);
+app.use("/users", users.router);
 
 // Server Start
 server.listen(serverSettings.port, function(){
@@ -34,6 +36,7 @@ server.listen(serverSettings.port, function(){
 // Load Databases
 games.loadData();
 groups.loadData();
+users.loadData();
 
 // Server Sutdown
 process.on("SIGINT", onExit);
