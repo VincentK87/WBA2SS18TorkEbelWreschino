@@ -22,9 +22,11 @@ app.use(bodyParser.json())
 // load scripts
 var games = require('./games/index.js');
 var groups = require('./groups/index.js');
+var users = require('./users/index.js');
 
 app.use("/games", games.router);
 app.use("/groups", groups.router);
+app.use("/users", users.router);
 
 // Load Databases
 async.waterfall([
@@ -55,7 +57,6 @@ async.waterfall([
 		console.log("App listening at %s:%s", serverSettings.host, serverSettings.port);
 	});
 });
-
 
 
 // Server Sutdown

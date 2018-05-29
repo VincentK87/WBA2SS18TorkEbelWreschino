@@ -19,8 +19,30 @@ const gameDataJson = "/igdb_games.json";
 var gameData;
 
 /**************************
+ * Object
+**************************/
+
+function Game() {
+    // TO DO
+}
+
+
+/**************************
  * REST API
 **************************/
+
+router.post('/', function(req, res) {
+    var games = req.body;
+
+    if(!checkIsValidForm(games)) {
+        res.sendStatus(406);
+    } else {
+        var newGame = new gameData();
+        allGames.push(newGame);
+
+        res.send(newGame);
+    }
+});
 
 router.get('/', function(req, res){
 
@@ -134,5 +156,4 @@ module.exports = {
 	});	
 
 	}
-
 }
