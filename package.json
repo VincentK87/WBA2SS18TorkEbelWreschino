@@ -17,6 +17,7 @@
   },
   "homepage": "https://github.com/plunata/WBA2SS18TorkEbelWreschino#readme",
   "dependencies": {
+    "async": "^2.6.1",
     "express": "^4.16.3",
     "igdb-api-node": "^3.1.4",
     "request": "^2.85.0"

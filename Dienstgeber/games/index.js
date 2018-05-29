@@ -114,19 +114,6 @@ function updateDatabase(){
 };
 
 
-function loadDatabase(){
-	fs.readFile(__dirname + gameDataJson, function(err, data){
-		gameData = JSON.parse(data);
-	});
-};
-
-function saveDatabase(){
-	fs.writeFile(__dirname + gameDataJson, JSON.stringify(gameData), function(err){
-		console.log("success saving file");
-	});	
-}
-
-
 /**************************
  * export
 **************************/
@@ -135,8 +122,17 @@ module.exports = {
 
 	router: router,
 
-	loadData : function () {
-		loadDatabase();
+	loadData : function (callback) {
+		fs.readFile(__dirname + gameDataJson, function(err, data){
+			gameData = JSON.parse(data);
+			callback(null, err);
+		});
+	},
+	saveData : function (callback) {
+		fs.writeFile(__dirname + gameDataJson, JSON.stringify(gameData), function(err){
+			callback(null, err);
+	});	
+
 	}
 
 }

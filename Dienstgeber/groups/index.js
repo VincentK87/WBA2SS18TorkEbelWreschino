@@ -1,5 +1,4 @@
 const express = require("express");
-const bodyParser = require('body-parser');
 const fs = require("fs");
 
 const router = express.Router();
@@ -13,7 +12,7 @@ var lastId;
  * Object
 **************************/
 function Group(name, game, vor, tags) {
-	this.id = lastId;
+	this.id = uniqid();
 	this.name = name;
 	this.mitglieder = [];
 	this.warteliste = [];
@@ -113,30 +112,6 @@ router.delete('/:groupID', function(req, res) {
  * Functions
 **************************/
 
-function loadDatabase() {
-	fs.readFile(__dirname + dbPath, function(err, data){
-		if(data.length == 0){
-			console.log("file was empty");
-			allGroups = [];
-			lastId = 0;
-		}
-		else {
-			var parseInfo = JSON.parse(data);
-			allGroups = parseInfo.data;
-			lastId = parseInfo.lastId;
-		}
-	});
-};
-
-function saveDatabase(){
-	var saveObj = {};
-	saveObj.data = allGroups;
-	saveObj.lastId = lastId;
-	fs.writeFile(__dirname + dbPath, JSON.stringify(saveObj), function(err){
-		console.log("success saving file");
-	});	
-}
-
 function getGroupById(id) {
 	return allGroups.find(function(element){
 		return element.id == id;
@@ -160,11 +135,28 @@ module.exports = {
 
 	router: router,
 
-	loadData : function () {
-		loadDatabase();
+	loadData : function (callback) {
+		fs.readFile(__dirname + dbPath, function(err, data){
+			if(data.length == 0){
+				console.log("file was empty");
+				allGroups = [];
+				lastId = 0;
+			}
+			else {
+				var parseInfo = JSON.parse(data);
+				allGroups = parseInfo.data;
+				lastId = parseInfo.lastId;
+			}
+			callback(null, err);
+		})
 	},
 	
-	saveData : function () {
-		saveDatabase();
+	saveData : function (callback) {
+		var saveObj = {};
+		saveObj.data = allGroups;
+		saveObj.lastId = lastId;
+		fs.writeFile(__dirname + dbPath, JSON.stringify(saveObj), function(err){
+			callback(null, err);
+		});
 	}
 }
