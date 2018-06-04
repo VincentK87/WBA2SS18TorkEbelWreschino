@@ -1,26 +1,23 @@
 const express = require("express");
 const fs = require("fs");
+const shortid = require('shortid');
 
 const router = express.Router();
 const dbPath = "/groups.json";
 
 var allGroups;
-var lastId;
-
 
 /**************************
  * Object
 **************************/
 function Group(name, game, vor, tags) {
-	this.id = uniqid();
+	this.id = shortid.generate();
 	this.name = name;
 	this.mitglieder = [];
 	this.warteliste = [];
 	this.game = game;
 	this.voraussetzungen = vor;
 	this.tags = tags;
-
-	lastId++;
 }
 
 Group.prototype.info = function() {
@@ -140,12 +137,10 @@ module.exports = {
 			if(data.length == 0){
 				console.log("file was empty");
 				allGroups = [];
-				lastId = 0;
 			}
 			else {
 				var parseInfo = JSON.parse(data);
 				allGroups = parseInfo.data;
-				lastId = parseInfo.lastId;
 			}
 			callback(null, err);
 		})
@@ -154,7 +149,6 @@ module.exports = {
 	saveData : function (callback) {
 		var saveObj = {};
 		saveObj.data = allGroups;
-		saveObj.lastId = lastId;
 		fs.writeFile(__dirname + dbPath, JSON.stringify(saveObj), function(err){
 			callback(null, err);
 		});

@@ -38,7 +38,9 @@ async.waterfall([
 		if(err != null){
 			callback(err, false);
 		}
-		games.loadData(callback);
+		else {
+			games.loadData(callback);
+		}
 	},
 	function (err, callback){
 		if(err != null){
@@ -53,7 +55,7 @@ async.waterfall([
 	
 
 // Server Start
-	server.listen(serverSettings.port, function(){
+	server.listen(serverSettings.port, function() {
 		console.log("App listening at %s:%s", serverSettings.host, serverSettings.port);
 	});
 });
@@ -72,7 +74,9 @@ function onExit(){
 			if(err != null){
 				callback(err, false);
 			}
-			games.saveData(callback);
+			else {
+				games.saveData(callback);
+			}
 		},
 		function (err, callback){
 			if(err != null){
