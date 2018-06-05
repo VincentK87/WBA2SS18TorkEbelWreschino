@@ -42,7 +42,7 @@ async.waterfall([
 	},
 	// if there is an error quit. else load user Data
 	function (err, callback){
-		if(err != null){
+		if(err != null) {
 			callback(err, false);
 		}
 		else {
