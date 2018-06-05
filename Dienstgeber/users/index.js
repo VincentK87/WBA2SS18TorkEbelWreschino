@@ -175,26 +175,28 @@ module.exports = {
     router: router,
 
     loadData : function(callback) {
-        fs.readFile(__dirname + dbPath, function(err,data){
+        fs.readFile(__dirname + dbPath, function(err, data){
 
-            if(data.length == 0) {
+		if(data.length == 0) {
                 console.log("file was empty");
                 allUsers = [];
             }
             else {
                 var parseInfo = JSON.parse(data);
+				
                 allUsers = parseInfo.data;
-            }
+				lastUserId = parseInfo.lastUserId;
+			}
 
             callback(null, err);
         });
     },
 
     saveData : function(callback) {
-        var savedObj = {};
+        var saveObj = {};
         saveObj.data = allUsers;
         saveObj.lastUserId = lastUserId;
-        fs.writeFile(__dirname + dbPath, JSON.stringify(this.saveObj), function(err) {
+        fs.writeFile(__dirname + dbPath, JSON.stringify(saveObj), function(err) {
             callback(null, err);
         });
     }

@@ -91,7 +91,7 @@ function onExit(){
 				callback(err + " - games", false);
 			}
 			else {
-				users.loadData(callback);
+				users.saveData(callback);
 			}
 		},
 		// if there was an error loading users -> quit
