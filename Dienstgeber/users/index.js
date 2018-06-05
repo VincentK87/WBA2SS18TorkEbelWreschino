@@ -49,6 +49,12 @@ router.post('/', function(req, res){
  });
  
  router.get('/', function(req, res) {
+    fs.readFile(__dirname + dbPath, function(err, data) {
+        console.log(data);
+        res.end(data);
+    });
+
+     /*
      var game = req.query.game;
 
      if(game == undefined) {
@@ -70,11 +76,9 @@ router.post('/', function(req, res){
              res.send(users);
          }
      }
-
-     /*
-     res.send(allUsers);
-     process.exit();
      */
+
+
  });
 
  router.get('/:userID', function(req, res) {
@@ -177,16 +181,17 @@ module.exports = {
     loadData : function(callback) {
         fs.readFile(__dirname + dbPath, function(err, data){
 
-		if(data.length == 0) {
+            if(data.length == 0) {
                 console.log("file was empty");
                 allUsers = [];
             }
             else {
                 var parseInfo = JSON.parse(data);
-				
+
                 allUsers = parseInfo.data;
-				lastUserId = parseInfo.lastUserId;
-			}
+                lastUserId = parseInfo.lastUserId;
+
+            }
 
             callback(null, err);
         });
