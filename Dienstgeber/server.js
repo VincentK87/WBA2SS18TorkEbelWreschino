@@ -46,7 +46,7 @@ async.waterfall([
 			callback(err, false);
 		}
 		else {
-			callback(null, true)
+			users.loadData(callback);
 		}
 	},
 ], function(err, success) {

@@ -41,6 +41,9 @@ router.post('/', function(req, res){
         var newUser = new User(user.name, user.nachname, user.username, user.games);
         allUsers.push(newUser);
 
+        //trying to save to users.json
+        fs.writeFile("users.json", JSON.stringify(newUser), user);
+
         res.send(newUser);
     }
  });
@@ -75,7 +78,7 @@ router.post('/', function(req, res){
  });
 
  router.get('/:userID', function(req, res) {
-    var user = getUserId(req.params.userID);
+    var user = getUserById(req.params.userID);
     if (user == undefined) {
         res.sendStatus(404);
     } else {
@@ -100,14 +103,18 @@ router.post('/', function(req, res){
  });
 
  router.delete('/:userID', function(req, res) {
-    var user = getUserById(req.params.userID);
+    
+    var obj = getUserById(req.params.userID);
 
-    if (user == undefined) {
-        res.sendStatus(404);
+    if(obj == undefined) {
+        res.sendStatus(404).type('text').send("Der Nutzer wurde nicht gefunden.");
         return;
-    } else {
-        delete user;
-        res.sendStatus(200);
+    }
+
+    var index = allUsers.indexOf(obj);
+    if (index > -1) {
+        allUsers.splice(index, 1);
+        res.sendStatus(200).type('text').send("User #" + req.params.userID + " wurde erfolgreich gelöscht.")
     }
  });
 
@@ -116,7 +123,7 @@ router.post('/', function(req, res){
  * Functions
  ****************************/
 
- function loadDatabase() {
+ /*function loadDatabase() {
     fs.readFile(__dirname + dbPath, function(err, data) {
         if(data.length == 0) {
             console.log("File was empty.");
@@ -131,7 +138,7 @@ router.post('/', function(req, res){
      fs.writeFile(__dirname + dbPath, JSON.stringify(allUsers), function(err) {
         console.log("success saving file");
      });
- };
+ };*/
 
  function getUserById(id) {
      return allUsers.find(function(element) {
@@ -167,19 +174,29 @@ function checkIsValidForm(data) {
 module.exports = {
     router: router,
 
-    loadData : function() {
-        loadDatabase();
+    loadData : function(callback) {
+        fs.readFile(__dirname + dbPath, function(err,data){
+
+            if(data.length == 0) {
+                console.log("file was empty");
+                allUsers = [];
+            }
+            else {
+                var parseInfo = JSON.parse(data);
+                allUsers = parseInfo.data;
+            }
+
+            callback(null, err, true);
+        });
     },
 
-    saveData : function() {
+    saveData : function(callback) {
         var savedObj = {};
         saveObj.data = allUsers;
         saveObj.lastUserId = lastUserId;
-        fs.writeFileSync(__dirname + dbPath, JSON.stringify(this.saveObj), function(err) {
-            console.log("success saving file :)");
+        fs.writeFile(__dirname + dbPath, JSON.stringify(this.saveObj), function(err) {
+            callback(null, err);
         });
-        
-        //saveDatabase();
     }
 
 }

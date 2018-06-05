@@ -28,7 +28,7 @@ var p = new Promise(function(resolve, reject)
 	});
 });
 
-p.then(function(combinedCities) 
+p.then(function(4) 
 {
 	citiesSorted = combinedCities.sort(function(a, b) 
 	{
