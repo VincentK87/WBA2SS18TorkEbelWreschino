@@ -34,7 +34,7 @@ async.waterfall([
 	// if there is an error quit. else load games Data
 	function (err, callback) {
 		if(err != null){
-			callback(err, false);
+			callback(err + " - groups", false);
 		}
 		else {
 			games.loadData(callback);
@@ -43,10 +43,19 @@ async.waterfall([
 	// if there is an error quit. else load user Data
 	function (err, callback){
 		if(err != null) {
-			callback(err, false);
+			callback(err + " - games", false);
 		}
 		else {
 			users.loadData(callback);
+		}
+	},
+	// if there is an error quit.
+	function (err, callback){
+		if(err != null) {
+			callback(err + " - users", false);
+		}
+		else {
+			callback(null, true);
 		}
 	},
 ], function(err, success) {
@@ -70,7 +79,7 @@ function onExit(){
 		// if there was an error -> quit. else save games
 		function (err, callback) {
 			if(err != null){
-				callback(err, false);
+				callback(err + " - groups", false);
 			}
 			else {
 				games.saveData(callback);
@@ -79,7 +88,16 @@ function onExit(){
 		// if there was an error -> quit. else save users
 		function (err, callback){
 			if(err != null){
-				callback(err, false);
+				callback(err + " - games", false);
+			}
+			else {
+				users.loadData(callback);
+			}
+		},
+		// if there was an error loading users -> quit
+		function (err, callback){
+			if(err != null){
+				callback(err + " - users", false);
 			}
 			else {
 				callback(null, true);
@@ -87,7 +105,6 @@ function onExit(){
 		},
 	], function(err, success) {
 		// close server
-		
 		console.log("Database " + (success? "successfully saved." : "failed saving. - " + err ));
 		
 		console.log("Server Shutdown");

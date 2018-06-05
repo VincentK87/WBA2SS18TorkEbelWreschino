@@ -186,7 +186,7 @@ module.exports = {
                 allUsers = parseInfo.data;
             }
 
-            callback(null, err, true);
+            callback(null, err);
         });
     },
 
