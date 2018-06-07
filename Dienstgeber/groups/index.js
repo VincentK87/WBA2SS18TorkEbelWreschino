@@ -39,6 +39,7 @@ Group.prototype.info = function() {
 **************************/
 // Creates a new group
 router.post('/', function(req, res){
+	console.log(req.body);
 	var group = req.body;
 	
 	// check if request is valid
@@ -169,10 +170,7 @@ function checkIsValidForm(data) {
 //checks if any data is empty
 	if(	data.name != undefined && 
 		data.game != undefined && 
-		data.requirements != undefined && 
-		data.members != undefined && 
-		data.queue != undefined &&
-		data.tags != undefined) 
+		data.requirements != undefined)
 	{
 		return true;
 	}
