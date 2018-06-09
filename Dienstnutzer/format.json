@@ -1,0 +1,17 @@
+[{
+	"groups": {
+		"name": "test123",
+		"members": [],
+		"queue": [],
+		"game": "minecraft",
+		"requirements": "keine",
+		"tags": ["test"]
+	},
+	"users": {
+		"id": "",
+		"name": "",
+		"nachname": "",
+		"username": "",
+		"games": []
+	}
+}]
