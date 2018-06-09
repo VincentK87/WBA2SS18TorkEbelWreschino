@@ -50,43 +50,21 @@ router.post('/', function(req, res){
  
  router.get('/', function(req, res) {
     fs.readFile(__dirname + dbPath, function(err, data) {
-        console.log(data);
-        res.end(data);
+        if(data.length != 0) {
+            console.log(data.toString);
+            res.status(200).type('json').send(data.toString());
+        } else {
+            res.status(400).type('text').send("Die User wurden nicht gefunden.");
+        }
     });
-
-     /*
-     var game = req.query.game;
-
-     if(game == undefined) {
-         res.send(allUsers);
-     } else {
-         var GameList = [];
-         allUsers.forEach(function(element) {
-            element.games.forEach(function(elem) {
-                if (elem == game) {
-                    GameList.push(element);
-                    return;
-                }
-            });
-         });
-
-         if(GameList.length == 0) {
-             res.sendStatus(404);
-         } else {
-             res.send(users);
-         }
-     }
-     */
-
-
  });
 
  router.get('/:userID', function(req, res) {
     var user = getUserById(req.params.userID);
     if (user == undefined) {
-        res.sendStatus(404);
+        res.status(404).type('text').send("Der User mit der ID " + req.params.userID + " wurde nicht gefunden.");
     } else {
-        res.send(user);
+        res.status(200).type('json').send(user);
     }
  });
 

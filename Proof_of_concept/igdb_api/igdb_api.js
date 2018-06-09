@@ -54,7 +54,7 @@ function getSomeGames() {
 function getSomePlatforms() {
 
     /*
-    Search for up to two Atari platforms and return their names
+    Search for up to two PlayStation platforms and return their names
     */
     client.platforms({
         limit: 2,
@@ -105,7 +105,7 @@ function getGamesById() {
 }
 
 /*
-Search for companies with 'rockstar' in their name. Return up to five
+Search for companies with 'square enix' in their name. Return up to five
 results sorted by name in descending order
 */
 function getSomeCompanies() {
