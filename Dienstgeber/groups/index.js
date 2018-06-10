@@ -39,7 +39,6 @@ Group.prototype.info = function() {
 **************************/
 // Creates a new group
 router.post('/', function(req, res){
-	console.log(req.body);
 	var group = req.body;
 	
 	// check if request is valid

@@ -96,9 +96,7 @@ function startInput() {
 					inEditMode = false;
 					break;
 				case "send":
-					options.json = JSON.stringify(currentObj);
-					console.log("TEST123" + sendRequest());
-					inEditMode = false;
+					console.log(sendRequestWithData(currentObj));
 					break;
 				default:
 					var check = input.split("=");
@@ -145,6 +143,14 @@ function newResource(method, resource) {
 	console.log(currentObj);
 	
 	inEditMode = true;
+}
+
+// 
+function sendRequestWithData(data){
+	options.body = currentObj;
+	options.json = true,
+	inEditMode = false;
+	return sendRequest();
 }
 
 // creates the request to the server
