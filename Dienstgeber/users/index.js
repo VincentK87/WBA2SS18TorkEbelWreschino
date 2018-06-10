@@ -61,6 +61,7 @@ router.post('/', function(req, res){
 
  router.get('/:userID', function(req, res) {
     var user = getUserById(req.params.userID);
+    console.log(user.toString());
     if (user == undefined) {
         res.status(404).type('text').send("Der User mit der ID " + req.params.userID + " wurde nicht gefunden.");
     } else {
@@ -129,23 +130,23 @@ router.post('/', function(req, res){
  };
 
 function checkIsValidForm(data) {
-    console.log(data.name);
-    console.log(data.nachname);
-    console.log(data.username);
-    if(data == undefined)
-        return false;
-    if(data.name != undefined && data.nachname != undefined && data.username != undefined) {
-        if (data.games.length == 0) {
+
+    fs.readFile(__dirname + dbPath, function(err, data) {    
+        if(data == undefined)
+            return false;
+        if(data.name != undefined && data.nachname != undefined && data.username != undefined) {
+            if (data.games.length == 0) {
+                return true;
+            } else {
+                data.games.forEach (function(element) {
+                    console.log(element);
+                });
+            }
             return true;
         } else {
-            data.games.forEach (function(element) {
-                console.log(element);
-            });
+            return false;
         }
-        return true;
-    } else {
-        return false;
-    }
+    });
 }
 
 
