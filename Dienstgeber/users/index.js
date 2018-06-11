@@ -49,24 +49,18 @@ router.post('/', function(req, res){
  });
  
  router.get('/', function(req, res) {
-    fs.readFile(__dirname + dbPath, function(err, data) {
-        if(data.length != 0) {
-            console.log(data.toString);
-            res.status(200).type('json').send(data.toString());
-        } else {
-            res.status(400).type('text').send("Die User wurden nicht gefunden.");
-        }
-    });
+	res.status(200).type('json').send(allUsers);
  });
 
  router.get('/:userID', function(req, res) {
-    var user = getUserById(req.params.userID);
-    console.log(user.toString());
-    if (user == undefined) {
-        res.status(404).type('text').send("Der User mit der ID " + req.params.userID + " wurde nicht gefunden.");
-    } else {
-        res.status(200).type('json').send(user);
-    }
+
+	getUserById(req.params.userID, function(user){
+		if (user == undefined) {
+			res.status(404).type('text').send("Der User mit der ID " + req.params.userID + " wurde nicht gefunden.");
+		} else {
+			res.status(200).type('json').send(user);
+		}
+	});
  });
 
  router.put('/:userID', function(req, res) {
@@ -74,32 +68,34 @@ router.post('/', function(req, res){
     if(!checkIsValidForm(info)) {
         res.sendStatus(406);
     } else {
-        var user = getUserById(req.params.userID);
+        getUserById(req.params.userID, function(user){
+		
+			user.name = info.name;
+			user.nachname = info.nachname;
+			user.username = info.username;
+			user.games = info.games;
 
-        user.name = info.name;
-        user.nachname = info.nachname;
-        user.username = info.username;
-        user.games = info.games;
-
-        res.send(user);
+			res.send(user);
+		});
     }
  });
 
  router.delete('/:userID', function(req, res) {
     
-    var obj = getUserById(req.params.userID);
+    getUserById(req.params.userID, function(obj){
+	
+		if(obj == undefined) {
+			res.sendStatus(404).type('text').send("Der Nutzer wurde nicht gefunden.");
+			return;
+		}
 
-    if(obj == undefined) {
-        res.sendStatus(404).type('text').send("Der Nutzer wurde nicht gefunden.");
-        return;
-    }
-
-    var index = allUsers.indexOf(obj);
-    if (index > -1) {
-        allUsers.splice(index, 1);
-        res.sendStatus(200).type('text').send("User #" + req.params.userID + " wurde erfolgreich gelöscht.")
-    }
- });
+		var index = allUsers.indexOf(obj);
+		if (index > -1) {
+			allUsers.splice(index, 1);
+			res.sendStatus(200).type('text').send("User #" + req.params.userID + " wurde erfolgreich gelöscht.")
+		}
+	});
+});
 
 
  /****************************
@@ -123,9 +119,12 @@ router.post('/', function(req, res){
      });
  };*/
 
- function getUserById(id) {
-     return allUsers.find(function(element) {
-        return element.id == id;
+ function getUserById(id, callback) {
+    allUsers.find(function(element) {
+		
+		if(element.id == id){
+			callback(element);
+		} 
      });
  };
 
@@ -167,7 +166,7 @@ module.exports = {
             else {
                 var parseInfo = JSON.parse(data);
 
-                allUsers = parseInfo.data;
+				allUsers = parseInfo.data;
                 lastUserId = parseInfo.lastUserId;
 
             }

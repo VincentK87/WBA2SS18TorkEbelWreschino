@@ -156,7 +156,7 @@ router.delete('/:groupID', function(req, res) {
 
 // return: id of the game 
 function getGroupById(id) {
-	return allGroups.find(function(element){
+	allGroups.find(function(element){
 		return element.id == id;
 	});
 }

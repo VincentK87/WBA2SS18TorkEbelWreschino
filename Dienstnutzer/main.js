@@ -211,6 +211,9 @@ function sendRequest(callback) {
 		if(response.statusCode.toString()[0] == 4 ){
 			console.log("Error");
 		}
+		else if(response.statusCode.toString()[0] == 5 ){
+			console.log("Server Error");
+		}
 		else {
 			
 			if(options.method == "POST" || options.method == "PUT") {
