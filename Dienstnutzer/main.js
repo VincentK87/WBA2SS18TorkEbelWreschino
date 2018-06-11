@@ -17,6 +17,7 @@ var inEditMode = false;
 var options = null;
 var currentObj = null;
 var AllObjects;
+var user = null;
 
 // settings to connect to server
 const settings = {
@@ -42,7 +43,7 @@ function startInput() {
 		if(!inEditMode) {
 			
 			switch (input) {
-			
+				
 				// output info for user
 				case "info":
 					fs.readFile(__dirname + README, 'utf8', function(err, data) {
@@ -67,11 +68,8 @@ function startInput() {
 							
 							newResource(input, resource);
 						} else {
-							
 							sendRequest(function(data){
-								console.log(data);
-								console.separate();
-								console.separate();
+								outputData(data);
 							});
 						}
 					});
@@ -96,13 +94,21 @@ function startInput() {
 					inEditMode = false;
 					break;
 				case "send":
-					console.log(sendRequestWithData(currentObj));
+					sendRequestWithData(currentObj, function(data){
+						outputData(data);
+					});
 					break;
 				default:
 					var check = input.split("=");
 					
-					if(check.length == 2){
+					if(check.length == 2) {
+
 						if(check[0] in currentObj) {
+
+							if(check[1].charAt(0) == "[" && check[1].charAt(check[1].length - 1) == "]"){
+								check[1] = JSON.parse(check[1]);
+							}
+						
 							currentObj[check[0]] = check[1];
 							console.separate();
 							console.log(currentObj);
@@ -122,35 +128,51 @@ function startInput() {
 
 function newResource(method, resource) {
 
-	if(resource in AllObjects){
 		
-		if (method == "POST") {
+	if (method == "POST" ) {
+		if(resource in AllObjects) {
 			currentObj = AllObjects[resource];
-		}
-		else if (method == "PUT") {
-			currentObj = sendRequest();
-			console.log(sendRequest());
-		}
-	} else {
-		console.log("resource doesnt exist or doesnt support POST/PUT");
-		console.separate();
-		return;
-	};
+			enterEditMode();
+		} else {
+			console.log("resource doesnt exist or doesnt support POST/PUT");
+			console.separate();
+			return;
+		};
+	}
+	else if (method == "PUT") {
+		options.method = "GET";
+		sendRequest(function(data){
+			currentObj = data;
+			options.method = "PUT";
+			enterEditMode();
+		});
+	}
+}
+
+// enterEditMode
+function enterEditMode(){
 	
 	// entering edit mode
 	console.separate();
 	console.log("Entered Edit mode");
-	console.log(currentObj);
-	
+	console.log(currentObj);	
 	inEditMode = true;
 }
 
 // 
-function sendRequestWithData(data){
+function sendRequestWithData(data, callback){
 	options.body = currentObj;
 	options.json = true,
 	inEditMode = false;
-	return sendRequest();
+	sendRequest(function(data){
+		callback(data);
+	});
+}
+
+function outputData(data){
+	console.log(data);
+	console.separate();
+	console.separate();
 }
 
 // creates the request to the server
@@ -170,7 +192,7 @@ function newRequest(methodD, res, data) {
 };
 
 // sends the Request
-function sendRequest() {
+function sendRequest(callback) {
 	
 	request(options, function(err, response) {
 		// if request fails -> exit
@@ -181,7 +203,23 @@ function sendRequest() {
 			rl.close();
 			return;
 		}
-		return JSON.parse(response.body);
+		
+		if(options.method == "DELETE"){
+			return;
+		}
+
+		if(response.statusCode.toString()[0] == 4 ){
+			console.log("Error");
+		}
+		else {
+			
+			if(options.method == "POST" || options.method == "PUT") {
+				callback(data);
+			} else {
+				var data = JSON.parse(response.body);
+				callback(data);
+			}
+		}
 	});
 }
 

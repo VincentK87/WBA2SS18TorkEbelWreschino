@@ -1,11 +1,11 @@
 [{
 	"groups": {
-		"name": "test123",
+		"name": "MegaFunGroup",
 		"members": [],
-		"queue": [],
-		"game": "minecraft",
-		"requirements": "keine",
-		"tags": ["test"]
+		"maxMember": 4,
+		"game": "fornite",
+		"requirements": "none",
+		"tags": ["fun"]
 	},
 	"users": {
 		"id": "",

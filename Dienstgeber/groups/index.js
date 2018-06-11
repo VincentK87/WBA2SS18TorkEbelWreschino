@@ -14,16 +14,16 @@ var allGroups;
 * id: automaticly generates unique id 
 * name: name of the group
 * members: list of members in the group
-* queue: list o members waiting to enter the group
+* maxMember: number of max users in group
 * game: the game attached to this group
 * requirements: string with the requirements
 * tags: list with tags to find the group
 */
-function Group(name, members, queue, game, requ, tags) {
+function Group(name, members, maxMem, game, requ, tags) {
 	this.id = shortid.generate();
 	this.name = name;
 	this.members = members;
-	this.queue = queue;
+	this.maxMember = maxMem;
 	this.game = game;
 	this.requirements = requ;
 	this.tags = tags;
@@ -47,7 +47,7 @@ router.post('/', function(req, res){
 	}
 	else {
 		//creates new Group and adds it to the List
-		var newGroup = new Group(group.name, group.members, group.queue, group.game, group.requirements, group.tags);
+		var newGroup = new Group(group.name, group.members, group.maxMember, group.game, group.requirements, group.tags);
 		allGroups.push(newGroup);
 		
 		// send the new group
@@ -121,7 +121,7 @@ router.put('/:groupID', function(req, res) {
 		group.name = info.name;
 		group.game = info.game;
 		group.members = info.members;
-		group.queue = info.queue;
+		group.maxMember = info.maxMember;
 		group.requirements = info.requirements;
 		group.tags = info.tags;
 		
