@@ -13,6 +13,11 @@ const rl = readline.createInterface({
 const dbPath = "/format.json";
 const README = "/README.txt";
 
+// editmode: when user makes input -> different functions
+// options: request header
+// currentObj: current editing body for request
+// AllObject: loaded json file for resources
+// user: TODO
 var inEditMode = false;
 var options = null;
 var currentObj = null;
@@ -24,8 +29,6 @@ const settings = {
 	host: "http://localhost",
 	port: 8080
 };
-
-var inMenu = true;
 
 /**************************
  * functions
@@ -40,6 +43,7 @@ function startInput() {
 	//starts the input loop
 	rl.on('line', function(input) {
 		
+		// check if user is NOT in editmode
 		if(!inEditMode) {
 			
 			switch (input) {
@@ -80,35 +84,43 @@ function startInput() {
 					console.log("Exiting program");
 					rl.close();
 					break;
+				
 				// if user mistypes
 				default:
 					console.log("invalid input");
 			};
+		// if user is in editmode
 		} else {
 			
 			switch (input) {
 				
+				// close editmode and delete the current request 
 				case "close":
 					currentObj = null;
 					console.log("process canceled");
 					inEditMode = false;
 					break;
+				// sends the request
 				case "send":
 					sendRequestWithData(currentObj, function(data){
 						outputData(data);
 					});
 					break;
+				// check if user wants to change some values
 				default:
 					var check = input.split("=");
 					
+					// check if user input was correct
 					if(check.length == 2) {
-
+						
 						if(check[0] in currentObj) {
 
-							if(check[1].charAt(0) == "[" && check[1].charAt(check[1].length - 1) == "]"){
+							// check if second string is an Object. if true parse it
+							if(check[1].charAt(0) == "[" && check[1].charAt(check[1].length - 1) == "]") {
 								check[1] = JSON.parse(check[1]);
 							}
-						
+							
+							// update value
 							currentObj[check[0]] = check[1];
 							console.separate();
 							console.log(currentObj);
@@ -126,9 +138,12 @@ function startInput() {
 	});
 };
 
+// creates a new resource
+// method: REST verb
+// resource: name of resource
 function newResource(method, resource) {
 
-		
+	// if POST load preset from AllObjects
 	if (method == "POST" ) {
 		if(resource in AllObjects) {
 			currentObj = AllObjects[resource];
@@ -139,6 +154,7 @@ function newResource(method, resource) {
 			return;
 		};
 	}
+	// if PUT first get the resource from server and update currentObj
 	else if (method == "PUT") {
 		options.method = "GET";
 		sendRequest(function(data){
@@ -152,14 +168,15 @@ function newResource(method, resource) {
 // enterEditMode
 function enterEditMode(){
 	
-	// entering edit mode
 	console.separate();
 	console.log("Entered Edit mode");
 	console.log(currentObj);	
 	inEditMode = true;
 }
 
-// 
+// Sends the request with a body
+// data: the body that should be send with request
+// callback: requests the response data.
 function sendRequestWithData(data, callback){
 	options.body = currentObj;
 	options.json = true,
@@ -169,6 +186,7 @@ function sendRequestWithData(data, callback){
 	});
 }
 
+// output Datas
 function outputData(data){
 	console.log(data);
 	console.separate();
