@@ -1,9 +1,9 @@
 [{
 	"groups": {
-		"name": "MegaFunGroup",
+		"name": "",
 		"members": [],
 		"maxMember": 4,
-		"game": "fornite",
+		"game": "",
 		"requirements": "none",
 		"tags": ["fun"]
 	},

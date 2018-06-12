@@ -64,7 +64,8 @@ router.post('/', function(req, res){
  });
 
  router.put('/:userID', function(req, res) {
-    var info = res.body;
+   
+	var info = req.body;
     if(!checkIsValidForm(info)) {
         res.sendStatus(406);
     } else {
@@ -130,22 +131,22 @@ router.post('/', function(req, res){
 
 function checkIsValidForm(data) {
 
-    fs.readFile(__dirname + dbPath, function(err, data) {    
-        if(data == undefined)
-            return false;
-        if(data.name != undefined && data.nachname != undefined && data.username != undefined) {
-            if (data.games.length == 0) {
-                return true;
-            } else {
-                data.games.forEach (function(element) {
-                    console.log(element);
-                });
-            }
-            return true;
-        } else {
-            return false;
-        }
-    });
+console.log(data);
+
+	if(data == undefined)
+		return false;
+	if(data.name != undefined && data.nachname != undefined && data.username != undefined) {
+		if (data.games.length == 0) {
+			return true;
+		} else {
+			data.games.forEach (function(element) {
+				console.log(element);
+			});
+		}
+		return true;
+	} else {
+		return false;
+	}
 }
 
 
