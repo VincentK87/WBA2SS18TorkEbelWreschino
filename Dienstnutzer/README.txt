@@ -7,6 +7,11 @@
 			"games": []
 		}
 
+#### LOGIN
+	- the system doest have a login system (not yet), but we need an user that interacts with the api.
+	- type 'login' and return it. Then the system asks you what user id you want to login with.
+	- to see what user ids are available you can make a 'GET' on 'users'.
+
 #### COMMANDS
 	- 'exit' to close the program"
 	- 'GET' / 'PUT' / 'DELETE' or 'POST' to specify what you want to do with a resource"

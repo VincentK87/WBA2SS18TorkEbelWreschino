@@ -2,6 +2,7 @@
 const request = require("request");
 const fs = require("fs");
 const readline = require('readline');
+const chalk = require('chalk');
 
 // rl for input possability
 const rl = readline.createInterface({
@@ -38,14 +39,12 @@ function startInput() {
 	
 	console.log("Hello !!!");
 	console.log("For information about the input possabilities type 'info'");
+	console.log("");
 	console.separate();
 
 	//starts the input loop
 	rl.on('line', function(input) {
 		
-		if(user == null){
-			console.log("pls login first");
-		}
 		// check if user is NOT in editmode
 		if(!inEditMode) {
 			
@@ -57,6 +56,34 @@ function startInput() {
 						console.separate();
 						console.log(data);
 						console.separate();
+					});
+					break;
+				//only for debug reasons
+				case "debug":
+					// add everything here to debug the script 
+					
+					console.log(user);
+					break;
+				//login user
+				case "login":
+					rl.question('userID : ', function(userID) {
+						
+						//prevent user send reuqest to all users
+						if(userID.length == 0) {
+							console.log(chalk.red("invalid user"));
+							return;
+						}
+						
+						var uri = "users/" + userID;
+						newRequest("GET", uri);
+						
+						sendRequest(function(data) {
+
+							user = data;
+							console.separate
+							console.log(chalk.green("Loged in as:"));
+							outputData(data);
+						});
 					});
 					break;
 				
@@ -90,7 +117,7 @@ function startInput() {
 				
 				// if user mistypes
 				default:
-					console.log("invalid input");
+					console.log(chalk.red("invalid input"));
 			};
 		// if user is in editmode
 		} else {
@@ -99,9 +126,14 @@ function startInput() {
 				
 				// close editmode and delete the current request 
 				case "close":
-					currentObj = null;
-					console.log("process canceled");
-					inEditMode = false;
+					rl.question("do you really want to close? all changes will be lost (Y/N)", function(closeNote) {
+						if(closeNote == "Y" || closeNote == "y"){
+							currentObj = null;
+							console.log("process canceled");
+							inEditMode = false;
+						}
+					});
+					
 					break;
 				// sends the request
 				case "send":
@@ -146,6 +178,13 @@ function startInput() {
 // resource: name of resource
 function newResource(method, resource) {
 
+	if(user == null) {
+		console.separate();
+		console.log("to make some changes on, you must first login. For the information type 'info'");
+		console.separate();
+		return;
+	}
+	
 	// if POST load preset from AllObjects
 	if (method == "POST" ) {
 		if(resource in AllObjects) {
@@ -159,8 +198,14 @@ function newResource(method, resource) {
 	}
 	// if PUT first get the resource from server and update currentObj
 	else if (method == "PUT") {
-		options.method = "GET";
 		
+		// if resource have have an invalid form
+		if(resource.split("/").length == 1) {
+			console.log(chalk.red.bold("resource error"));
+			console.separate();
+			return;
+		}
+		options.method = "GET";
 		sendRequest(function(data) {
 			currentObj = data;
 			options.method = "PUT";
@@ -173,7 +218,7 @@ function newResource(method, resource) {
 function enterEditMode(){
 	
 	console.separate();
-	console.log("Entered Edit mode");
+	console.log(chalk.blue("Entered Edit mode"));
 	console.log(currentObj);	
 	inEditMode = true;
 }
@@ -201,7 +246,7 @@ function outputData(data){
 // method: is the REST verb
 // res: is the path to the resource
 // data: body sending on POST or PUT
-function newRequest(methodD, res, data) {
+function newRequest(methodD, res) {
 	
 	// request header
 	options = {
@@ -219,22 +264,28 @@ function sendRequest(callback) {
 	request(options, function(err, response) {
 		// if request fails -> exit
 		console.separate();
-		console.log("status = " + response.statusCode);
 		if(err != null){
-			console.log("Error" + err);
+			console.log(chalk.red("Error" + err));
 			rl.close();
 			return;
 		}
 		
+		if(response.statusCode.toString()[0] == 2 ) {
+			console.log(chalk.green.bold("Status = " + response.statusCode));
+		}
+		else{
+			console.log(chalk.red("Status = " + response.statusCode));
+		}
+		
+		
 		if(options.method == "DELETE"){
 			return;
 		}
-
 		if(response.statusCode.toString()[0] == 4 ){
-			console.log("Error");
+			console.log(chalk.red("Client Error"));
 		}
 		else if(response.statusCode.toString()[0] == 5 ){
-			console.log("Server Error");
+			console.log(chalk.red("Server Error"));
 		}
 		else {
 			
@@ -250,7 +301,7 @@ function sendRequest(callback) {
 
 // seperate script :)
 console.separate = function() {
-	console.log("**********************************************");
+	console.log(chalk.blue("**********************************************"));
 };
 
 // load formats from database 
