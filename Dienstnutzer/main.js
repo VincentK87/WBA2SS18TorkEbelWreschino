@@ -17,7 +17,7 @@ const README = "/README.txt";
 // options: request header
 // currentObj: current editing body for request
 // AllObject: loaded json file for resources
-// user: TODO
+// user: authentificates user
 var inEditMode = false;
 var options = null;
 var currentObj = null;
@@ -43,6 +43,9 @@ function startInput() {
 	//starts the input loop
 	rl.on('line', function(input) {
 		
+		if(user == null){
+			console.log("pls login first");
+		}
 		// check if user is NOT in editmode
 		if(!inEditMode) {
 			
@@ -157,7 +160,8 @@ function newResource(method, resource) {
 	// if PUT first get the resource from server and update currentObj
 	else if (method == "PUT") {
 		options.method = "GET";
-		sendRequest(function(data){
+		
+		sendRequest(function(data) {
 			currentObj = data;
 			options.method = "PUT";
 			enterEditMode();
