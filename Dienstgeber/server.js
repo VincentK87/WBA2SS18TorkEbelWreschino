@@ -18,7 +18,7 @@ app.use(bodyParser.json())
 // load scripts from all resources
 var games = require('./games/index.js');
 var groups = require('./groups/index.js');
-var events = require('./events/events.js');
+var events = require('./events/index.js');
 var users = require('./users/index.js');
 
 app.use("/games", games.router);
@@ -42,10 +42,18 @@ async.waterfall([
 			games.loadData(callback);
 		}
 	},
+	function (err, callback) {
+		if(err != null){
+			callback(err + " - games", false);
+		}
+		else {
+			events.loadData(callback);
+		}
+	},
 	// if there is an error quit. else load user Data
 	function (err, callback){
 		if(err != null) {
-			callback(err + " - games", false);
+			callback(err + " - events", false);
 		}
 		else {
 			users.loadData(callback);
@@ -89,7 +97,7 @@ function onExit(){
 		},
 		function (err, callback) {
 			if(err != null){
-				callback(err + " - events", false);
+				callback(err + " - games", false);
 			}
 			else {
 				events.saveData(callback);
@@ -98,7 +106,7 @@ function onExit(){
 		// if there was an error -> quit. else save users
 		function (err, callback){
 			if(err != null){
-				callback(err + " - games", false);
+				callback(err + " - events", false);
 			}
 			else {
 				users.saveData(callback);
