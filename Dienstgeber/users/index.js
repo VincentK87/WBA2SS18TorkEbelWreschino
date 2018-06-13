@@ -120,11 +120,10 @@ router.post('/', function(req, res){
 
 function checkIsValidForm(data) {
 
-
-
 	if(data == undefined)
 		return false;
 	if(data.name != undefined && data.nachname != undefined && data.username != undefined) {
+        console.log(data.games);
 		if (data.games.length == 0) {
 			return true;
 		} else {

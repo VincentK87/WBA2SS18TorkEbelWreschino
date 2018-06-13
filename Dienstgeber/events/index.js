@@ -6,10 +6,11 @@ const dbPath = "/events.json";
 
 var allEvents;
 
-function Event(name, members, queue, game, requ, tags) {
+function Event(name, members, maxMem, queue, game, requ, tags) {
     this.id = lastEventsID;
     this.name = name;
     this.members = members;
+    this.maxMem = maxMem;
     this.queue = queue;
     this.game = game;
     this.requirements = requ;
@@ -27,7 +28,7 @@ function Event(name, members, queue, game, requ, tags) {
     if(!checkIsValidForm(event)) {
         res.status(406);
     } else {
-        var newEvent = new Event(event.name, event.members, event.queue, event.game, event.requirements, event.tags);
+        var newEvent = new Event(event.name, event.members, event.maxMem, event.queue, event.game, event.requirements, event.tags);
         allEvents.push(newEvent);
 
         res.send(newEvent);
@@ -84,6 +85,7 @@ function Event(name, members, queue, game, requ, tags) {
 
         event.name = info.name;
         event.members = info.members;
+        event.maxMember = info.maxMem;
         event.queue = info.queue;
         event.game = info.game;
         event.requirements = info.requirements;
