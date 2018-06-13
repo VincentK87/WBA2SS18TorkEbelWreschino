@@ -18,7 +18,7 @@ app.use(bodyParser.json())
 // load scripts from all resources
 var games = require('./games/index.js');
 var groups = require('./groups/index.js');
-var events = require('./groups/events.js');
+var events = require('./events/events.js');
 var users = require('./users/index.js');
 
 app.use("/games", games.router);
