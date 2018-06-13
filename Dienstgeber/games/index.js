@@ -31,6 +31,7 @@ function Game() {
  * REST API
 **************************/
 
+/*
 router.post('/', function(req, res) {
     var games = req.body;
 
@@ -43,11 +44,13 @@ router.post('/', function(req, res) {
         res.send(newGame);
     }
 });
+*/
 
 router.get('/', function(req, res){
 
+
     client.games({
-        fields: '*', // Return all fields
+        fields: 'name', // return id, name and url
         limit: 5, // Limit to 5 results
         offset: 15 // Index offset for results
     }).then(gameData => {
@@ -57,6 +60,7 @@ router.get('/', function(req, res){
     });
     
 });
+
 
 router.get('/filtertest', function(req, res) {
 
@@ -119,6 +123,7 @@ router.get('/filtertest', function(req, res) {
         'logo'
     ]).then(log);
 });
+
 
 
 /**************************
