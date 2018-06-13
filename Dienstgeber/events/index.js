@@ -1,4 +1,4 @@
-/**@requires express 
+/**@requires express and
  * fs
  */
 const   express = require('express'),
@@ -59,7 +59,7 @@ function Event(name, members, maxMem, queue, game, requ, tags) {
         });
 
         if (tagList.length == 0) {
-            res.status(404);
+            res.sendStatus(404);
         } else {
             res.send(tagList);
         }
