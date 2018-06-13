@@ -70,19 +70,19 @@ router.post('/', function(req, res){
     if(!checkIsValidForm(info)) {
         res.sendStatus(406);
     } else {
-        var user = getUserById(req.params.userID);
-
-        if(user == undefined) {
-            res.send(404);
-            return;
-        } else {
-            user.name = info.name;
-			user.nachname = info.nachname;
-			user.username = info.username;
-            user.games = info.games;
-
-            res.send(user);
-        }
+        var user = getUserById(req.params.userID, function(user) {
+            if(user == undefined) {
+                res.send(404);
+                return;
+            } else {
+                user.name = info.name;
+                user.nachname = info.nachname;
+                user.username = info.username;
+                user.games = info.games;
+    
+                res.send(user);
+            }
+        });
     }
  });
 
