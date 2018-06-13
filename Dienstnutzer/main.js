@@ -296,7 +296,7 @@ function sendRequest(callback) {
 		else {
 			
 			if(options.method == "POST" || options.method == "PUT") {
-				callback(data);
+				callback(response.body);
 			} else {
 				var data = JSON.parse(response.body);
 				callback(data);
