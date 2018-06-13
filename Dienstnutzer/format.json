@@ -2,7 +2,7 @@
 	"groups": {
 		"name": "",
 		"members": [],
-		"maxMember": 4,
+		"maxMember": 0,
 		"game": "",
 		"requirements": "none",
 		"tags": ["fun"]

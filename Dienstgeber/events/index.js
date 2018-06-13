@@ -1,11 +1,17 @@
+/**@requires express 
+ * fs
+ */
 const   express = require('express'),
         fs = require('fs');
 
+// setup
 const router = express.Router();
 const dbPath = "/events.json";
 
+// variables
 var allEvents;
 
+/**@constructor */
 function Event(name, members, maxMem, queue, game, requ, tags) {
     this.id = lastEventsID;
     this.name = name;
