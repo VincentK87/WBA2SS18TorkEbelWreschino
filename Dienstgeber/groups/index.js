@@ -135,7 +135,6 @@ router.put('/:groupID', function(req, res) {
 // DELETEs a resource
 router.delete('/:groupID', function(req, res) {
 
-	console.log(req);
 	// returns a group by id
 	getGroupById(req.params.groupID, function(obj){
 		
