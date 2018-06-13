@@ -18,10 +18,12 @@ app.use(bodyParser.json())
 // load scripts from all resources
 var games = require('./games/index.js');
 var groups = require('./groups/index.js');
+var events = require('./groups/events.js');
 var users = require('./users/index.js');
 
 app.use("/games", games.router);
 app.use("/groups", groups.router);
+app.use("/events", events.router);
 app.use("/users", users.router);
 
 // Load Databases sync
@@ -83,6 +85,14 @@ function onExit(){
 			}
 			else {
 				games.saveData(callback);
+			}
+		},
+		function (err, callback) {
+			if(err != null){
+				callback(err + " - events", false);
+			}
+			else {
+				events.saveData(callback);
 			}
 		},
 		// if there was an error -> quit. else save users

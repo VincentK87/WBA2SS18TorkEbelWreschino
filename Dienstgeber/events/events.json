@@ -1,0 +1,15 @@
+{
+    "data": [
+        {
+            "id": "123",
+            "name": "Ultimative Fun Event",
+            "members": [],
+            "queue": [],
+            "game": "LOLOL",
+            "requirements": "being a fun person",
+            "tags": [
+                "blubb"
+            ]
+        }
+    ]
+}
