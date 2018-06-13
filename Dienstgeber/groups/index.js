@@ -88,15 +88,16 @@ router.get('/', function(req, res){
 });
 
 // GETs one group
-router.get('/:groupID', function(req, res){
-	// returns a Group by id
-	var group = getGroupById(req.params.groupID)
+router.get('/:groupID', function(req, res) {
 	
-	// if group is undefined return 404 else return the group
-	if(group == undefined)
-		res.sendStatus(404);
-	else
-		res.send(group);
+	// returns a Group by id
+	getGroupById(req.params.groupID, function(group){
+		// if group is undefined return 404 else return the group
+		if(group == undefined)
+			res.sendStatus(404);
+		else
+			res.send(group);
+	});
 });
 
 // PUTs new information into existing resource
@@ -109,45 +110,49 @@ router.put('/:groupID', function(req, res) {
 	}
 	else {
 		// gets the group
-		var group = getGroupById(req.params.groupID)
-		
-		// if group doesnt exist return 404 and stops the script
-		if(group == undefined){
-			res.send(404);
-			return;
-		}
-		
-		// else update all stats
-		group.name = info.name;
-		group.game = info.game;
-		group.members = info.members;
-		group.maxMember = info.maxMember;
-		group.requirements = info.requirements;
-		group.tags = info.tags;
-		
-		res.send(group);
+		getGroupById(req.params.groupID, function(group){
+			
+			// if group doesnt exist return 404 and stops the script
+			if(group == undefined){
+				res.send(404);
+				return;
+			}
+			
+			// else update all stats
+			group.name = info.name;
+			group.game = info.game;
+			group.members = info.members;
+			group.maxMember = info.maxMember;
+			group.requirements = info.requirements;
+			group.tags = info.tags;
+			
+			res.send(group);
+
+		});
 	}
 });
 
 // DELETEs a resource
 router.delete('/:groupID', function(req, res) {
 
+	console.log(req);
 	// returns a group by id
-	var obj = getGroupById(req.params.groupID);
-	
-	// if the group doesnt exist return 404 and stops the script
-	if(obj == undefined) {
-		res.sendStatus(404);
-		return;
-	}
-	
-	// gets the index in the List of an Object
-	var index = allGroups.indexOf(obj);
-	if (index > -1) {
-	// deletes the group and return 200
-		allGroups.splice(index, 1);
-		res.sendStatus(200);
-	};
+	getGroupById(req.params.groupID, function(obj){
+		
+		// if the group doesnt exist return 404 and stops the script
+		if(obj == undefined) {
+			res.sendStatus(404);
+			return;
+		}
+		
+		// gets the index in the List of an Object
+		var index = allGroups.indexOf(obj);
+		if (index > -1) {
+		// deletes the group and return 200
+			allGroups.splice(index, 1);
+			res.sendStatus(200);
+		};
+	});
 });
 
 /**************************
@@ -155,9 +160,11 @@ router.delete('/:groupID', function(req, res) {
 **************************/
 
 // return: id of the game 
-function getGroupById(id) {
+function getGroupById(id, callback) {
 	allGroups.find(function(element){
-		return element.id == id;
+		if(element.id == id){
+			callback(element);
+		}
 	});
 }
 

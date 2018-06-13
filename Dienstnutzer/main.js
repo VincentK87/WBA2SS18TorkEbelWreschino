@@ -92,7 +92,7 @@ function startInput() {
 				case "POST":
 				case "GET":
 				case "DELETE":
-									
+					
 					// ask user what resource he/she wants
 					rl.question('what resource? ', function(resource) {
 						
@@ -129,7 +129,7 @@ function startInput() {
 					rl.question("do you really want to close? all changes will be lost (Y/N)", function(closeNote) {
 						if(closeNote == "Y" || closeNote == "y"){
 							currentObj = null;
-							console.log("process canceled");
+							console.log(chalk.red("process canceled"));
 							inEditMode = false;
 						}
 					});
@@ -189,6 +189,11 @@ function newResource(method, resource) {
 	if (method == "POST" ) {
 		if(resource in AllObjects) {
 			currentObj = AllObjects[resource];
+			
+			if ('members' in currentObj) {
+				currentObj.members.push(user.id);
+			}
+			
 			enterEditMode();
 		} else {
 			console.log("resource doesnt exist or doesnt support POST/PUT");
@@ -207,6 +212,7 @@ function newResource(method, resource) {
 		}
 		options.method = "GET";
 		sendRequest(function(data) {
+
 			currentObj = data;
 			options.method = "PUT";
 			enterEditMode();
@@ -260,7 +266,7 @@ function newRequest(methodD, res) {
 
 // sends the Request
 function sendRequest(callback) {
-	
+
 	request(options, function(err, response) {
 		// if request fails -> exit
 		console.separate();
