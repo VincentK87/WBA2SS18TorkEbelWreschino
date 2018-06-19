@@ -1,23 +1,25 @@
 const   express = require('express'),
         fs = require('fs'),
-        request = require('request'),
-        shortid = require('shortid');
+        request = require('request');
 
 const   router = express.Router(),
         dbPath = "/users.json";
         
-var allUsers;
+var     allUsers,
+        lastUserId;
 
 /****************************
  * Object
  ****************************/
 
 function User(name, nachname, username, games) {
-    this.id = shortid.generate();
+    this.id = lastUserId;
     this.name = name;
     this.nachname = nachname;
     this.username = username;
     this.games = games;
+
+    lastUserId++;
 }
 
  User.prototype.info = function() {
@@ -146,12 +148,12 @@ module.exports = {
             if(data.length == 0) {
                 console.log("file was empty");
                 allUsers = [];
+                lastUserId = 0;
             }
             else {
                 var parseInfo = JSON.parse(data);
-
 				allUsers = parseInfo.data;
-
+                lastUserId = parseInfo.lastUserId;
             }
 
             callback(null, err);
@@ -161,6 +163,7 @@ module.exports = {
     saveData : function(callback) {
         var saveObj = {};
         saveObj.data = allUsers;
+        saveObj.lastUserId = lastUserId;
         fs.writeFile(__dirname + dbPath, JSON.stringify(saveObj), function(err) {
             callback(null, err);
         });

@@ -2,7 +2,8 @@
  * fs
  */
 const   express = require('express'),
-        fs = require('fs');
+        fs = require('fs'),
+        shortid = require('shortid');
 
 // setup
 const router = express.Router();
@@ -13,7 +14,7 @@ var allEvents;
 
 /**@constructor */
 function Event(name, members, maxMem, queue, game, requ, tags) {
-    this.id = lastEventsID;
+    this.id = shortid.generate();
     this.name = name;
     this.members = members;
     this.maxMem = maxMem;
