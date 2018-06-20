@@ -7,6 +7,16 @@
 		"requirements": "none",
 		"tags": ["fun"]
 	},
+	"events": {
+		"name": "teyt",
+		"members": [],
+		"queue": [],
+		"game": "123",
+		"requirements": "hghggh",
+		"tags": [
+			""
+		]
+	},
 	"users": {
 		"name": "",
 		"nachname": "",
