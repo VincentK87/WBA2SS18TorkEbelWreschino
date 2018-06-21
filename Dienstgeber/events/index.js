@@ -9,9 +9,11 @@ const   express = require('express'),
 // setup
 const router = express.Router();
 const dbPath = "/events.json";
+const userPath = "/../users/users.json";
 
 // global variables
 var allEvents,
+    allUsers,
     lastEventId;
 
 /** constructor for events
@@ -50,15 +52,19 @@ function Event(name, members, maxMem, queue, game, requ, tags) {
     if(!checkIsValidForm(event)) {
         res.status(406);
     } else {
-        if(!containsUser) {
-            res.status(406);
-        } else {
+
+        // (is supposed to) check every member in the event against users array to make sure all of them exist
+        for(member in event.members) {
+            if(hasUser(member) === false) {
+                res.status(406);
+            } else {
             // creates a new event 
             var newEvent = new Event(event.name, event.members, event.maxMem, event.queue, event.game, event.requirements, event.tags);
             allEvents.push(newEvent);
 
             // adds created event to the associated JSON file
             res.send(newEvent);
+            }   
         }
     }
  });
@@ -193,14 +199,38 @@ function Event(name, members, maxMem, queue, game, requ, tags) {
             return false;
         }
  }
+ 
+ //attempt to check for existing users does not work yet...
+const hasUser = function (eventMember) {
+    for (user in allUsers) {
+        if (allUsers.id === eventMember.id) {
+            return true;
+        } 
+        // If the for loop ended and it did not find any match, return false
+        else {
+            return false;
+        }
+    } 
+ }
 
- /*function containsUser(data) {
-     if 
- }*/
+
+ 
+
 
   /****************************
  * Exports
  ****************************/
+
+fs.readFileSync(__dirname + userPath, function(err,data) {
+    if (data.length === 0) {
+        console.log("User file is empty!");
+        allUsers = [];
+    } else {
+        var parseInfo = JSON.parse(data);
+        allUsers = parseInfo.data;
+    }
+    
+});
 
  // exports module to server
  module.exports = {
@@ -246,7 +276,7 @@ function Event(name, members, maxMem, queue, game, requ, tags) {
          saveObj.data = allEvents;
          saveObj.lastEventId = lastEventId;
          fs.writeFile(__dirname + dbPath, JSON.stringify(saveObj), function(err) {
-             
+
             // calls callback
             callback(null, err);
          });
