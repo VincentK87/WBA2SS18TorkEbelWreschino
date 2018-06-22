@@ -1,12 +1,16 @@
 // require modules
 const express = require("express");
 const http = require("http");
+const faye = require('faye');
 const bodyParser = require('body-parser')
 const async = require("async");
 
 // server settings
 const app = express();
-const server = http.createServer(app);
+var server = http.createServer(app);
+var bayeux = new faye.NodeAdapter({mount: '/faye', timeout: 45});
+
+bayeux.attach(server);
 
 const serverSettings = {
 	host: "https://localhost",

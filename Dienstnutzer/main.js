@@ -3,6 +3,16 @@ const request = require("request");
 const fs = require("fs");
 const readline = require('readline');
 const chalk = require('chalk');
+const faye = require('faye');
+
+// settings to connect to server
+const settings = {
+	host: "http://localhost",
+	port: 8080
+};
+
+// connect to faye server
+const client = new faye.Client(settings.host + ":" + settings.port + "/faye");
 
 // rl for input possability
 const rl = readline.createInterface({
@@ -24,12 +34,6 @@ var options = null;
 var currentObj = null;
 var AllObjects;
 var user = null;
-
-// settings to connect to server
-const settings = {
-	host: "http://localhost",
-	port: 8080
-};
 
 /**************************
  * functions
@@ -60,9 +64,20 @@ function startInput() {
 					break;
 				//only for debug reasons
 				case "debug":
-					// add everything here to debug the script 
 					
-					console.log(user);
+					// add everything here to debug the script 
+					client.publish('/sGroup/test', {
+						text: 'Hello world'
+					});
+					break;
+				case "searchGroup":
+					
+					// ask user for tag
+					rl.question('what tag? ', function(tag) {
+
+					client.subscribe('/sGroup/' + tag , function(message) {
+						console.log('Found a group: ' + message.text);
+					});
 					break;
 				//login user
 				case "login":
