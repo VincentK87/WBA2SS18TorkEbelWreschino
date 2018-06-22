@@ -152,7 +152,14 @@ function startInput() {
 
 							// check if second string is an Object. if true parse it
 							if(check[1].charAt(0) == "[" && check[1].charAt(check[1].length - 1) == "]") {
-								check[1] = JSON.parse(check[1]);
+								
+								try {
+									check[1] = JSON.parse(check[1]);
+								}
+								catch(error) {
+									console.log(chalk.red.bold("invalid json format"));
+									return;
+								}
 							}
 							
 							// update value
@@ -165,6 +172,8 @@ function startInput() {
 						}
 						break;
 					} 
+					
+// TODO : 
 					
 					console.log("wrong format or unknown command");
 					break;
