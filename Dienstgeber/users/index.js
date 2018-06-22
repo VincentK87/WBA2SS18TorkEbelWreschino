@@ -5,13 +5,12 @@ const   express = require('express'),
 const   router = express.Router(),
         dbPath = "/users.json";
         
-var     allUsers,
-        lastUserId;
+		global.allUsers;
+var		lastUserId;
 
 /****************************
  * Object
  ****************************/
-
 function User(name, nachname, username, games) {
     this.id = lastUserId;
     this.name = name;
