@@ -70,13 +70,55 @@ function startInput() {
 						text: 'Hello world'
 					});
 					break;
+				// Group search system
 				case "searchGroup":
 					
 					// ask user for tag
-					rl.question('what tag? ', function(tag) {
-
-					client.subscribe('/sGroup/' + tag , function(message) {
-						console.log('Found a group: ' + message.text);
+					rl.question('what game are you looking for? ', function(game) {
+						//TODO:
+						// check if game exist
+						if(true) {
+						
+							rl.question('what tags for ' + game + '?', function(tags) {
+								
+								var tag = tags.split("/");
+								if(tag[0] == ''){
+									console.log(chalk.red("Tag list is empty"));
+									console.separate();
+									return;
+								}
+								
+								for(var i = 0; i < tag.length; i++){
+									
+									console.log(chalk.blue('Subscribed for ' + game + '/' + tag[i]));
+									
+									// subscribe for games
+									client.subscribe('/' + game + '/' + tag[i], function(message) {
+										console.log('Found a group: ' + message.text);
+									});
+									
+									console.log(chalk.blue("looking for already existings groups"));
+									newRequest("GET", "groups");
+									
+									sendRequest(function(data) {
+										for(var i = 0; i < data.length; i++){
+											if(data[i].game == game) {
+												data[i].tags.forEach(function(element) {
+													if(element in tag){
+														console.log(data[i]);
+													}
+												});
+											}
+										}
+									});
+								}
+							console.separate();
+							});
+						}
+						else {
+							console.log("this game doesnt exist");
+							return;
+						}
 					});
 					break;
 				//login user

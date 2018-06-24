@@ -17,6 +17,8 @@
 	- 'GET' / 'PUT' / 'DELETE' or 'POST' to specify what you want to do with a resource"
 	- after the REST verb the system will ask you what resource you want to edit.
 	  please note, when interacting with a spezific resource to enter the whole path 'resource/{id}' (example: 'groups/34SAeta5').
+	- 'searchGroup' to search for groups. First a game have to be entered.
+		if you want multiple tags pls write a '/' between them without spaces.
 
     - IN EDITMODE: (POST or PUT) editmode is to change values from an object.
 	- 'name=test123' to set the changes for the object
