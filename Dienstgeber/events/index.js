@@ -202,7 +202,7 @@ function Event(name, members, maxMem, queue, game, requ, tags) {
  
  //attempt to check for existing users does not work yet...
 const hasUser = function (eventMember) {
-    for (user in allUsers) {
+    for (data in global.allUsers) {
         if (allUsers.id === eventMember.id) {
             return true;
         } 
