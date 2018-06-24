@@ -45,7 +45,6 @@ function Event(name, members, maxMem, queue, game, requ, tags) {
 
  // creates a new event
  router.post('/', function(req, res) {
-    console.log(req.body);
     var event = req.body;
 
     // check if request is valid

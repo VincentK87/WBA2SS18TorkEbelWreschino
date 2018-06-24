@@ -1,7 +1,6 @@
 // require modules
 const express = require("express");
 const fs = require("fs");
-const shortid = require('shortid');
 
 // set up
 const router = express.Router();
@@ -9,6 +8,7 @@ const dbPath = "/groups.json";
 
 // saves all groups
 var allGroups;
+var lastGroupsID;
 
 /*Group creates a new group
 * id: automaticly generates unique id 
@@ -20,13 +20,15 @@ var allGroups;
 * tags: list with tags to find the group
 */
 function Group(name, members, maxMem, game, requ, tags) {
-	this.id = shortid.generate();
+	this.id = lastGroupsID;
 	this.name = name;
 	this.members = members;
 	this.maxMember = maxMem;
 	this.game = game;
 	this.requirements = requ;
 	this.tags = tags;
+	
+	lastGroupsID++
 }
 
 // returns main information of the group
@@ -177,6 +179,16 @@ function checkIsValidForm(data) {
 		data.game != undefined && 
 		data.requirements != undefined)
 	{
+		if(data.members.length == 0)
+			return false;
+		
+		data.members.forEach( function(element) {
+			if(element in global.allUsers){
+			} else {
+				return false;
+			};
+		});
+		
 		return true;
 	}
 	return false
@@ -202,11 +214,13 @@ module.exports = {
 			if(data.length == 0){
 				console.log("file was empty");
 				allGroups = [];
+				lastGroupsID = 0;
 			}
 			// else parse JSON and save into allGroups
 			else {
 				var parseInfo = JSON.parse(data);
 				allGroups = parseInfo.data;
+				lastGroupsID = parseInfo.lastGroupsID;
 			}
 			// calls callback
 			callback(null, err);
@@ -220,6 +234,7 @@ module.exports = {
 		//saves allGroups into File and calls callback
 		var saveObj = {};
 		saveObj.data = allGroups;
+		saveObj.lastGroupsID = lastGroupsID;
 		fs.writeFile(__dirname + dbPath, JSON.stringify(saveObj), function(err){
 			callback(null, err);
 		});

@@ -20,6 +20,8 @@
 
     - IN EDITMODE: (POST or PUT) editmode is to change values from an object.
 	- 'name=test123' to set the changes for the object
+	- if changes are made for an java Object like ["test", "test2"] write the object in json format inside '[' and ']'
+		- *IMPORTANT* dont use 'test' for strings. Use "test"
 	- 'close' to exit editmode and cancel the process
 	- 'send' to send request
 

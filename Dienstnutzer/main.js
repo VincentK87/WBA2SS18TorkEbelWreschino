@@ -3,6 +3,16 @@ const request = require("request");
 const fs = require("fs");
 const readline = require('readline');
 const chalk = require('chalk');
+const faye = require('faye');
+
+// settings to connect to server
+const settings = {
+	host: "http://localhost",
+	port: 8080
+};
+
+// connect to faye server
+const client = new faye.Client(settings.host + ":" + settings.port + "/faye");
 
 // rl for input possability
 const rl = readline.createInterface({
@@ -24,12 +34,6 @@ var options = null;
 var currentObj = null;
 var AllObjects;
 var user = null;
-
-// settings to connect to server
-const settings = {
-	host: "http://localhost",
-	port: 8080
-};
 
 /**************************
  * functions
@@ -60,9 +64,20 @@ function startInput() {
 					break;
 				//only for debug reasons
 				case "debug":
-					// add everything here to debug the script 
 					
-					console.log(user);
+					// add everything here to debug the script 
+					client.publish('/sGroup/test', {
+						text: 'Hello world'
+					});
+					break;
+				case "searchGroup":
+					
+					// ask user for tag
+					rl.question('what tag? ', function(tag) {
+
+					client.subscribe('/sGroup/' + tag , function(message) {
+						console.log('Found a group: ' + message.text);
+					});
 					break;
 				//login user
 				case "login":
@@ -152,7 +167,14 @@ function startInput() {
 
 							// check if second string is an Object. if true parse it
 							if(check[1].charAt(0) == "[" && check[1].charAt(check[1].length - 1) == "]") {
-								check[1] = JSON.parse(check[1]);
+								
+								try {
+									check[1] = JSON.parse(check[1]);
+								}
+								catch(error) {
+									console.log(chalk.red.bold("invalid json format"));
+									return;
+								}
 							}
 							
 							// update value
@@ -165,6 +187,8 @@ function startInput() {
 						}
 						break;
 					} 
+					
+// TODO : 
 					
 					console.log("wrong format or unknown command");
 					break;
