@@ -146,7 +146,7 @@ function startInput() {
 
 							user = data;
 							console.separate
-							console.log(chalk.green("Loged in as:"));
+							console.log(chalk.green("Logged in as:"));
 							outputData(data);
 						});
 					});

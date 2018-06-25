@@ -46,8 +46,7 @@ router.post('/', function(req, res){
 	// check if request is valid
 	if(!checkIsValidForm(group)){
 		res.sendStatus(406);
-	}
-	else {
+	} else {
 		//creates new Group and adds it to the List
 		var newGroup = new Group(group.name, group.members, group.maxMember, group.game, group.requirements, group.tags);
 		allGroups.push(newGroup);

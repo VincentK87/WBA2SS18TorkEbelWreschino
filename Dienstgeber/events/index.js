@@ -9,11 +9,9 @@ const   express = require('express'),
 // setup
 const router = express.Router();
 const dbPath = "/events.json";
-const userPath = "/../users/users.json";
 
 // global variables
 var allEvents,
-    allUsers,
     lastEventId;
 
 /** constructor for events
@@ -51,21 +49,13 @@ function Event(name, members, maxMem, queue, game, requ, tags) {
     if(!checkIsValidForm(event)) {
         res.status(406);
     } else {
+        // creates a new event 
+        var newEvent = new Event(event.name, event.members, event.maxMem, event.queue, event.game, event.requirements, event.tags);
+        allEvents.push(newEvent);
 
-        // (is supposed to) check every member in the event against users array to make sure all of them exist
-        event.members.forEach(function(element) {
-            if(hasUser(element) === false) {
-                res.status(406);
-            } else {
-            // creates a new event 
-            var newEvent = new Event(event.name, event.members, event.maxMem, event.queue, event.game, event.requirements, event.tags);
-            allEvents.push(newEvent);
-
-            // adds created event to the associated JSON file
-            res.send(newEvent);
-            }   
-        }
-    }
+        // adds created event to the associated JSON file
+        res.send(newEvent);
+        }        
  });
 
  // gets a list of all the events
@@ -183,8 +173,11 @@ function Event(name, members, maxMem, queue, game, requ, tags) {
 
  // check if form of an event is acceptable
  function checkIsValidForm(data) {
+
+    var stat = true;
+
      if (data == undefined) {
-         return false;
+         stat = false;
      }
 
      // check if given data is empty
@@ -192,11 +185,18 @@ function Event(name, members, maxMem, queue, game, requ, tags) {
             data.game != undefined &&
             data.requirements != undefined     
         ) 
-        {
-            return true;
-        } else {
-            return false;
+        { 
+            if(data.members.length == 0)
+                stat = false;
+
+            data.members.forEach(function(element) {
+                if(!global.allUsers.some(e => e.id == element)) {
+                    stat = false;
+                }
+            });
         }
+        return stat;
+
  }
  
  //attempt to check for existing users does not work yet...
