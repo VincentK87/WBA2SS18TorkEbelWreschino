@@ -1,1 +1,5 @@
+<<<<<<< HEAD
+{"data":[{"id":1,"name":"test","members":[],"queue":[],"game":"123","requirements":"hghggh","tags":[""]},{"id":2,"name":"Event 1","members":[6],"queue":[],"game":"123","requirements":"blubb","tags":[""]},{"id":2,"name":"test","members":[0],"queue":[],"game":"123","requirements":"hghggh","tags":[""]},{"id":3,"name":"test","members":[4],"queue":[],"game":"123","requirements":"hghggh","tags":[""]}],"lastEventId":4}
+=======
 {"data":[{"id":1,"name":"teyt","members":"{\"id\":9}","queue":[],"game":"123","requirements":"hghggh","tags":[""]},{"id":2,"name":"teyt","members":"{\"id\":9}","queue":[],"game":"123","requirements":"hghggh","tags":[""]},{"id":3,"name":"teyt","members":"{\"id\":9}","queue":[],"game":"123","requirements":"hghggh","tags":[""]}],"lastEventId":5}
+>>>>>>> 7fc8858496c1620ac1b06a0a59418ab4be690e8d

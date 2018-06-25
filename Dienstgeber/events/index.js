@@ -200,16 +200,12 @@ function Event(name, members, maxMem, queue, game, requ, tags) {
  }
  
  //attempt to check for existing users does not work yet...
-const hasUser = function (eventMember) {
-    for (data in global.allUsers) {
-        if (allUsers.id === eventMember.id) {
-            return true;
-        } 
+hasUser = function (eventMember) {
+    //global.allUsers.find(user => user.id === eventMember.id)
+    if (eventMember in global.allUsers)
         // If the for loop ended and it did not find any match, return false
-        else {
-            return false;
-        }
-    } 
+            return 1;
+    
  }
 
 
@@ -219,17 +215,6 @@ const hasUser = function (eventMember) {
   /****************************
  * Exports
  ****************************/
-
-fs.readFileSync(__dirname + userPath, function(err,data) {
-    if (data.length === 0) {
-        console.log("User file is empty!");
-        allUsers = [];
-    } else {
-        var parseInfo = JSON.parse(data);
-        allUsers = parseInfo.data;
-    }
-    
-});
 
  // exports module to server
  module.exports = {
