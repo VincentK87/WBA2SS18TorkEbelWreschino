@@ -171,8 +171,11 @@ function getGroupById(id, callback) {
 
 // checks if the form of a group is valid
 function checkIsValidForm(data) {
+	
+	var stat = true;
+	
 	if(data == undefined)
-		return false;
+		stat = false;
 
 //checks if any data is empty
 	if(	data.name != undefined && 
@@ -180,18 +183,15 @@ function checkIsValidForm(data) {
 		data.requirements != undefined)
 	{
 		if(data.members.length == 0)
-			return false;
+			stat = false;
 		
 		data.members.forEach( function(element) {
-			if(element in global.allUsers){
-			} else {
-				return false;
-			};
+			if(!global.allUsers.some(e => e.id == element)) {
+				stat = false;
+			}
 		});
-		
-		return true;
 	}
-	return false
+	return stat;
 }
 /**************************
  * export
