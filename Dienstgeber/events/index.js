@@ -47,7 +47,7 @@ function Event(name, members, maxMem, queue, game, requ, tags) {
 
     // check if request is valid
     if(!checkIsValidForm(event)) {
-        res.status(406);
+        res.sendStatus(406);
     } else {
         // creates a new event 
         var newEvent = new Event(event.name, event.members, event.maxMem, event.queue, event.game, event.requirements, event.tags);
