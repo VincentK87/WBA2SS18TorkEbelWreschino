@@ -53,8 +53,8 @@ function Event(name, members, maxMem, queue, game, requ, tags) {
     } else {
 
         // (is supposed to) check every member in the event against users array to make sure all of them exist
-        for(member in event.members) {
-            if(hasUser(member) === false) {
+        event.members.forEach(function(element) {
+            if(hasUser(element) === false) {
                 res.status(406);
             } else {
             // creates a new event 
@@ -204,7 +204,7 @@ hasUser = function (eventMember) {
     //global.allUsers.find(user => user.id === eventMember.id)
     if (eventMember in global.allUsers)
         // If the for loop ended and it did not find any match, return false
-            return 1;
+            return true;
     
  }
 

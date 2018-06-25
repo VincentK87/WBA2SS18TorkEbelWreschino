@@ -1,5 +1,1 @@
-<<<<<<< HEAD
-{"data":[{"id":"1","name":"test1234","members":[0],"maxMember":"1","game":"lol","requirements":"none","tags":["fun"]},{"id":"2","name":"Group2","members":[0],"maxMember":0,"game":"","requirements":"none","tags":["fun"]},{"id":3,"name":"test123","members":[2],"maxMember":"4","game":"minecraft","requirements":"fun","tags":["test","123","fun"]}],"lastGroupsID":8}
-=======
 {"data":[{"id":"1","name":"test1234","members":[0],"maxMember":"1","game":"lol","requirements":"none","tags":["fun"]},{"id":"2","name":"Group2","members":[0],"maxMember":0,"game":"","requirements":"none","tags":["fun"]},{"id":3,"name":"test123","members":[2],"maxMember":"4","game":"minecraft","requirements":"fun","tags":["test","123","fun"]},{"id":9,"name":"funWarframegroup","members":[0],"maxMember":0,"game":"warframe","requirements":"none","tags":["fun"]}],"lastGroupsID":10}
->>>>>>> 7fc8858496c1620ac1b06a0a59418ab4be690e8d

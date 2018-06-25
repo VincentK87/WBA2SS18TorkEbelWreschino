@@ -50,7 +50,7 @@ router.get('/', function(req, res){
 
 
     client.games({
-        limit: 5, // Limit to 5 results
+        limit: 20, // Limit to 5 results
         offset: 0, // Index offset for results
         order: 'release_dates.date:desc',
         search: 'ff'
