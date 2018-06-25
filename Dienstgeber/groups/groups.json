@@ -1,5 +1,1 @@
-<<<<<<< HEAD
-{"data":[{"id":"HkK2iBaxm","name":"YAYAYA","members":[],"maxMember":"10","game":"ffxiv","requirements":"fun","tags":["fun"]},{"id":"B1I2E9Rxm","name":"test123","members":[0],"maxMember":"1","game":"lol","requirements":"none","tags":["fun"]},{"id":"H1CQ8ZHW7","name":"Group2","members":[0],"maxMember":0,"game":"","requirements":"none","tags":["fun"]},{"id":"BJVuzITbX","name":"test2","members":[0],"maxMember":0,"game":"","requirements":"none","tags":["fun"]},{"id":"rknnAU6Zm","name":"Event#99","members":[9],"maxMember":0,"game":"","requirements":"none","tags":["fun"]},{"id":"rJPg1w6-Q","name":"Event#99","members":[7],"maxMember":0,"game":"","requirements":"none","tags":["fun"]}]}
-=======
 {"data":[{"id":"1","name":"test1234","members":[0],"maxMember":"1","game":"lol","requirements":"none","tags":["fun"]},{"id":"2","name":"Group2","members":[0],"maxMember":0,"game":"","requirements":"none","tags":["fun"]},{"id":3,"name":"test123","members":[2],"maxMember":"4","game":"minecraft","requirements":"fun","tags":["test","123","fun"]}],"lastGroupsID":8}
->>>>>>> 49daf8b16ed02cbb78ebc5a5b109248b2feabaf3
