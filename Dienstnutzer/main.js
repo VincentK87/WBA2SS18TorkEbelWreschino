@@ -66,53 +66,58 @@ function startInput() {
 				case "debug":
 					
 					// add everything here to debug the script 
-					client.publish('/sGroup/test', {
-						text: 'Hello world'
-					});
 					break;
 				// Group search system
 				case "searchGroup":
 					
-					// ask user for tag
+					// ask user for what game he is looking
 					rl.question('what game are you looking for? ', function(game) {
 						//TODO:
 						// check if game exist
 						if(true) {
 						
-							rl.question('what tags for ' + game + '?', function(tags) {
+							// ask user what tags he is looking for 
+							rl.question('what tags for ' + game + '? ', function(tags) {
 								
+								// check what tags the user entered
 								var tag = tags.split("/");
+								
+								// check if tags are empty
 								if(tag[0] == ''){
 									console.log(chalk.red("Tag list is empty"));
 									console.separate();
 									return;
 								}
 								
-								for(var i = 0; i < tag.length; i++){
+								console.log(chalk.blue("looking for already existings groups"));
+								
+								//GET all groups and check if theres already a matching one
+								newRequest("GET", "groups");
+								
+								sendRequest(function(data) {
 									
-									console.log(chalk.blue('Subscribed for ' + game + '/' + tag[i]));
-									
-									// subscribe for games
-									client.subscribe('/' + game + '/' + tag[i], function(message) {
-										console.log('Found a group: ' + message.text);
-									});
-									
-									console.log(chalk.blue("looking for already existings groups"));
-									newRequest("GET", "groups");
-									
-									sendRequest(function(data) {
-										for(var i = 0; i < data.length; i++){
-											if(data[i].game == game) {
-												data[i].tags.forEach(function(element) {
-													if(element in tag){
-														console.log(data[i]);
-													}
-												});
-											}
+									// check all entered tags
+									for(var i = 0; i < tag.length; i++){
+										
+										//inform about subscriptions
+										console.log(chalk.blue('Subscribed for ' + game + '/' + tag[i]));
+										
+										// subscribe for games
+										client.subscribe('/' + game + '/' + tag[i], function(message) {
+											console.log('Found a group: ' + message.data);
+										});
+									}
+
+									for(var i = 0; i < data.length; i++){
+										if(data[i].game == game) {
+											data[i].tags.forEach(function(element) {
+												if(tag.indexOf(element) > -1) {
+													console.log(data[i]);
+												}
+											});
 										}
-									});
-								}
-							console.separate();
+									}
+								});
 							});
 						}
 						else {
@@ -229,9 +234,6 @@ function startInput() {
 						}
 						break;
 					} 
-					
-// TODO : 
-					
 					console.log("wrong format or unknown command");
 					break;
 			};
@@ -341,14 +343,12 @@ function sendRequest(callback) {
 			rl.close();
 			return;
 		}
-		
 		if(response.statusCode.toString()[0] == 2 ) {
 			console.log(chalk.green.bold("Status = " + response.statusCode));
 		}
 		else{
 			console.log(chalk.red("Status = " + response.statusCode));
 		}
-		
 		
 		if(options.method == "DELETE"){
 			return;
@@ -362,6 +362,18 @@ function sendRequest(callback) {
 		else {
 			
 			if(options.method == "POST" || options.method == "PUT") {
+				
+				// publish the created group
+				if(response.client._httpMessage.method == "POST" && response.client._httpMessage.path == "/groups"){
+		
+					response.body.tags.forEach(function(element){
+						
+						client.publish('/'+ response.body.game + '/' + element, {
+							data: response.body
+						});
+					});
+				};
+				
 				callback(response.body);
 			} else {
 				var data = JSON.parse(response.body);
