@@ -104,7 +104,10 @@ function startInput() {
 										
 										// subscribe for games
 										client.subscribe('/' + game + '/' + tag[i], function(message) {
-											console.log('Found a group: ' + message.data);
+											console.separate();
+											console.log(chalk.blue('Found a group for: ' + game));
+											console.log(message.data);
+											console.separate();
 										});
 									}
 
