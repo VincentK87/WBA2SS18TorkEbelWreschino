@@ -51,8 +51,11 @@ router.post('/', function(req, res){
 		var newGroup = new Group(group.name, group.members, group.maxMember, group.game, group.requirements, group.tags);
 		allGroups.push(newGroup);
 		
-		// send the new group
-		res.send(newGroup);
+		changeData(newGroup, function(data){
+			
+			// send the new group
+			res.send(data);
+		})
 	}
 });
 
@@ -145,8 +148,11 @@ router.put('/:groupID', function(req, res) {
 			group.requirements = info.requirements;
 			group.tags = info.tags;
 			
-			res.send(group);
-
+			changeData(group, function(data){
+			
+				// send the new group
+				res.send(data);
+			});
 		});
 	}
 });
