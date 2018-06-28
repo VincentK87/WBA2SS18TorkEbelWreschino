@@ -71,18 +71,18 @@ function Event(name, members, maxMem, queue, game, requ, tags) {
 		var data = [];
 		
 		var ct = 0;
-		
-		allEvents.forEach(function(element) {
-			changeData(element, function(elem){
+
+		for(var i = 0; i < allEvents.length; i++) {
+			ct++;
+			changeData(allEvents[i], function(elem) {
 				
 				data.push(elem);
-				
-				ct++;
-				if(ct == allEvents.length){
+
+				if(ct == allEvents.length ){
 					res.send(data);
 				}
 			});
-		});
+		}
     } else {
         // if query parameter is set search all events for the query
         var tagList = [];
@@ -115,13 +115,13 @@ function Event(name, members, maxMem, queue, game, requ, tags) {
 
      // in case the requested event is undefined return 404 error...
      if (event == undefined) {
-         res.status(404);
+         res.sendStatus(404);
      } 
      // ... otherwise send event 
      else {
 		changeData(event, function(data){
 			res.send(data);
-		}
+		});
      }
  });
 
@@ -131,14 +131,14 @@ function Event(name, members, maxMem, queue, game, requ, tags) {
 
     // check if request contains valid data
     if (!checkIsValidForm(info)) {
-        res.status(406);
+        res.sendStatus(406);
     } else {
         // gets requested event
         var event = getEventById(req.params.eventID);
 
         // if event does not exist return 404 error
         if (event == undefined) {
-            res.status(404);
+            res.sendStatus(404);
             return;
         }
 
@@ -167,7 +167,7 @@ function Event(name, members, maxMem, queue, game, requ, tags) {
 
     // if the requested event does not exist return 404 error 
     if (obj == undefined) {
-        res.status(404);
+        res.sendStatus(404);
         return;
     }
 
@@ -177,7 +177,7 @@ function Event(name, members, maxMem, queue, game, requ, tags) {
     // removes the event and return 200 message
     if (index > -1) {
         allEvents.splice(index, 1);
-        res.status(200);
+        res.sendStatus(200);
     };
  });
 
