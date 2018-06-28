@@ -225,11 +225,7 @@ function changeData(data, callback) {
 	
 	element.href = serverSettings.host + ":" + serverSettings.port + "/groups/" + element.id;
 	delete element.id;
-	
-	//element.members.forEach(function(ele) {
-	//	ele = serverSettings.host + ":" + serverSettings.port + "/users/" + ele;
-	//});
-	
+
 	for(var i = 0; i < element.members.length; i++){
 		element.members[i] = serverSettings.host + ":" + serverSettings.port + "/users/" + element.members[i];
 		

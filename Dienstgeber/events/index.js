@@ -54,8 +54,10 @@ function Event(name, members, maxMem, queue, game, requ, tags) {
         allEvents.push(newEvent);
 
         // adds created event to the associated JSON file
-        res.send(newEvent);
-        }        
+		changeData(newEvent, function(data){
+			res.send(data);
+        });
+	}
  });
 
  // gets a list of all the events
@@ -66,7 +68,21 @@ function Event(name, members, maxMem, queue, game, requ, tags) {
 
     if(tag == undefined) {
         // if no query parameter is set send all events
-        res.send(allEvents);
+		var data = [];
+		
+		var ct = 0;
+		
+		allEvents.forEach(function(element) {
+			changeData(element, function(elem){
+				
+				data.push(elem);
+				
+				ct++;
+				if(ct == allEvents.length){
+					res.send(data);
+				}
+			});
+		});
     } else {
         // if query parameter is set search all events for the query
         var tagList = [];
@@ -103,7 +119,9 @@ function Event(name, members, maxMem, queue, game, requ, tags) {
      } 
      // ... otherwise send event 
      else {
-         res.send(event);
+		changeData(event, function(data){
+			res.send(data);
+		}
      }
  });
 
@@ -133,7 +151,11 @@ function Event(name, members, maxMem, queue, game, requ, tags) {
         event.requirements = info.requirements;
         event.tags = info.tags;
         
-        res.send(event);
+		changeData(event, function(data){
+			
+			// send the new event
+			res.send(data);
+		});
     }
  });
 
@@ -207,6 +229,25 @@ hasUser = function (eventMember) {
             return true;
     
  }
+ 
+ // chenges the data to send to the user
+// hides the ids and creates a hypermedia href
+function changeData(data, callback) {
+	
+	var element = JSON.parse(JSON.stringify(data));
+	
+	element.href = serverSettings.host + ":" + serverSettings.port + "/events/" + element.id;
+	delete element.id;
+
+	for(var i = 0; i < element.members.length; i++){
+		element.members[i] = serverSettings.host + ":" + serverSettings.port + "/events/" + element.members[i];
+		
+		if(i == element.members.length -1){
+			callback(element);
+		}
+	}
+}
+
 
   /****************************
  * Exports
