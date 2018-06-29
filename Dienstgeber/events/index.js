@@ -178,7 +178,7 @@ function Event(name, members, maxMem, queue, game, requ, tags) {
 
      if (data == undefined) {
          stat = false;
-     }
+     } 
 
      // check if given data is empty
      if (   data.name != undefined &&
