@@ -13,7 +13,6 @@ var bayeux = new faye.NodeAdapter({mount: '/faye', timeout: 45});
 bayeux.attach(server);
 
 global.serverSettings = {
-	host: "https://localhost",
 	port: process.env.PORT || 8080
 }
 // bodyparser for json being able to read
