@@ -283,8 +283,28 @@ function newResource(method, resource) {
 		}
 		options.method = "GET";
 		sendRequest(function(data) {
+			
+			if(data.href != undefined)
+				delete data.href;
 
-			currentObj = data;
+			if(data.members != undefined) {
+				
+				var ct = 0;
+				
+				for(var i = 0; i < data.members.length; i++) {
+					var te = data.members[i].split('/');
+					data.members[i]	 = te[te.length-1];
+					
+					ct++
+					
+					if(ct == data.members.length){
+						currentObj = data;
+					}
+				};
+			}
+			else {
+				currentObj = data;
+			}
 			options.method = "PUT";
 			enterEditMode();
 		});

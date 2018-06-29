@@ -12,7 +12,7 @@ var bayeux = new faye.NodeAdapter({mount: '/faye', timeout: 45});
 
 bayeux.attach(server);
 
-const serverSettings = {
+global.serverSettings = {
 	host: "https://localhost",
 	port: process.env.PORT || 8080,
 }
@@ -37,18 +37,10 @@ async.waterfall([
 	function(callback) {
 		groups.loadData(callback);
 	},
-	// if there is an error quit. else load games Data
+	// if there is an error quit. else load events Data
 	function (err, callback) {
 		if(err != null){
 			callback(err + " - groups", false);
-		}
-		else {
-			games.loadData(callback);
-		}
-	},
-	function (err, callback) {
-		if(err != null){
-			callback(err + " - games", false);
 		}
 		else {
 			events.loadData(callback);
@@ -90,18 +82,10 @@ function onExit(){
 		function(callback){
 			groups.saveData(callback);
 		},
-		// if there was an error -> quit. else save games
+		// if there was an error -> quit. else save events
 		function (err, callback) {
 			if(err != null){
 				callback(err + " - groups", false);
-			}
-			else {
-				games.saveData(callback);
-			}
-		},
-		function (err, callback) {
-			if(err != null){
-				callback(err + " - games", false);
 			}
 			else {
 				events.saveData(callback);

@@ -51,8 +51,11 @@ router.post('/', function(req, res){
 		var newGroup = new Group(group.name, group.members, group.maxMember, group.game, group.requirements, group.tags);
 		allGroups.push(newGroup);
 		
-		// send the new group
-		res.send(newGroup);
+		changeData(newGroup, function(data){
+			
+			// send the new group
+			res.send(data);
+		})
 	}
 });
 
@@ -64,7 +67,22 @@ router.get('/', function(req, res){
 	
 	if(tag == undefined) {
 		// if no query param is set send all groups
-		res.send(allGroups);
+		var data = [];
+		
+		var ct = 0;
+		
+		allGroups.forEach(function(element) {
+			changeData(element, function(elem){
+				
+				data.push(elem);
+				
+				ct++;
+				if(ct == allGroups.length){
+					res.send(data);
+				}
+			});
+		});
+
 	} else {
 		
 		// if query param is set search all groups in foreach for the query
@@ -97,7 +115,10 @@ router.get('/:groupID', function(req, res) {
 		if(group == undefined)
 			res.sendStatus(404);
 		else
-			res.send(group);
+			changeData(group, function(data){
+				res.send(data);
+			})
+			
 	});
 });
 
@@ -127,8 +148,11 @@ router.put('/:groupID', function(req, res) {
 			group.requirements = info.requirements;
 			group.tags = info.tags;
 			
-			res.send(group);
-
+			changeData(group, function(data){
+			
+				// send the new group
+				res.send(data);
+			});
 		});
 	}
 });
@@ -191,6 +215,24 @@ function checkIsValidForm(data) {
 		});
 	}
 	return stat;
+}
+
+// chenges the data to send to the user
+// hides the ids and creates a hypermedia href
+function changeData(data, callback) {
+	
+	var element = JSON.parse(JSON.stringify(data));
+	
+	element.href = serverSettings.host + ":" + serverSettings.port + "/groups/" + element.id;
+	delete element.id;
+
+	for(var i = 0; i < element.members.length; i++){
+		element.members[i] = serverSettings.host + ":" + serverSettings.port + "/users/" + element.members[i];
+		
+		if(i == element.members.length -1){
+			callback(element);
+		}
+	}
 }
 /**************************
  * export

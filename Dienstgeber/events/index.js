@@ -54,8 +54,10 @@ function Event(name, members, maxMem, queue, game, requ, tags) {
         allEvents.push(newEvent);
 
         // adds created event to the associated JSON file
-        res.send(newEvent);
-        }        
+		changeData(newEvent, function(data){
+			res.send(data);
+        });
+	}
  });
 
  // gets a list of all the events
@@ -66,7 +68,21 @@ function Event(name, members, maxMem, queue, game, requ, tags) {
 
     if(tag == undefined) {
         // if no query parameter is set send all events
-        res.send(allEvents);
+		var data = [];
+		
+		var ct = 0;
+
+		for(var i = 0; i < allEvents.length; i++) {
+			ct++;
+			changeData(allEvents[i], function(elem) {
+				
+				data.push(elem);
+
+				if(ct == allEvents.length ){
+					res.send(data);
+				}
+			});
+		}
     } else {
         // if query parameter is set search all events for the query
         var tagList = [];
@@ -99,11 +115,13 @@ function Event(name, members, maxMem, queue, game, requ, tags) {
 
      // in case the requested event is undefined return 404 error...
      if (event == undefined) {
-         res.status(404);
+         res.sendStatus(404);
      } 
      // ... otherwise send event 
      else {
-         res.send(event);
+		changeData(event, function(data){
+			res.send(data);
+		});
      }
  });
 
@@ -113,14 +131,14 @@ function Event(name, members, maxMem, queue, game, requ, tags) {
 
     // check if request contains valid data
     if (!checkIsValidForm(info)) {
-        res.status(406);
+        res.sendStatus(406);
     } else {
         // gets requested event
         var event = getEventById(req.params.eventID);
 
         // if event does not exist return 404 error
         if (event == undefined) {
-            res.status(404);
+            res.sendStatus(404);
             return;
         }
 
@@ -133,7 +151,11 @@ function Event(name, members, maxMem, queue, game, requ, tags) {
         event.requirements = info.requirements;
         event.tags = info.tags;
         
-        res.send(event);
+		changeData(event, function(data){
+			
+			// send the new event
+			res.send(data);
+		});
     }
  });
 
@@ -145,7 +167,7 @@ function Event(name, members, maxMem, queue, game, requ, tags) {
 
     // if the requested event does not exist return 404 error 
     if (obj == undefined) {
-        res.status(404);
+        res.sendStatus(404);
         return;
     }
 
@@ -155,7 +177,7 @@ function Event(name, members, maxMem, queue, game, requ, tags) {
     // removes the event and return 200 message
     if (index > -1) {
         allEvents.splice(index, 1);
-        res.status(200);
+        res.sendStatus(200);
     };
  });
 
@@ -207,6 +229,25 @@ hasUser = function (eventMember) {
             return true;
     
  }
+ 
+ // chenges the data to send to the user
+// hides the ids and creates a hypermedia href
+function changeData(data, callback) {
+	
+	var element = JSON.parse(JSON.stringify(data));
+	
+	element.href = serverSettings.host + ":" + serverSettings.port + "/events/" + element.id;
+	delete element.id;
+
+	for(var i = 0; i < element.members.length; i++){
+		element.members[i] = serverSettings.host + ":" + serverSettings.port + "/events/" + element.members[i];
+		
+		if(i == element.members.length -1){
+			callback(element);
+		}
+	}
+}
+
 
   /****************************
  * Exports

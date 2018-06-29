@@ -38,13 +38,30 @@ router.post('/', function(req, res){
         var newUser = new User(user.name, user.nachname, user.username, user.games);
         allUsers.push(newUser);
 
-        res.send(newUser);
+		changeData(newUser, function(data){
+			res.send(data);
+		});
     }
  });
  
  router.get('/', function(req, res) {
-	res.status(200).type('json').send(allUsers);
- });
+	
+	var data = [];
+	
+	var ct = 0;
+	
+	allUsers.forEach(function(element) {
+		changeData(element, function(elem){
+			
+			data.push(elem);
+			
+			ct++;
+			if(ct == allUsers.length){
+				res.send(data);
+			}
+		});
+	});
+});
 
  router.get('/:userID', function(req, res) {
 
@@ -52,7 +69,9 @@ router.post('/', function(req, res){
 		if (user == undefined) {
 			res.status(404).type('text').send("Der User mit der ID " + req.params.userID + " wurde nicht gefunden.");
 		} else {
-			res.status(200).type('json').send(user);
+			changeData(user, function(data){
+				res.status(200).type('json').send(data);
+			})
 		}
 	});
  });
@@ -75,7 +94,9 @@ router.post('/', function(req, res){
                 user.username = info.username;
                 user.games = info.games;
     
-                res.send(user);
+				changeData(user, function(data){
+					res.send(data);
+				});
             }
         });
     }
@@ -133,6 +154,17 @@ function checkIsValidForm(data) {
 	}
 }
 
+// chenges the data to send to the user
+// hides the ids and creates a hypermedia href
+function changeData(data, callback) {
+	
+	var element = JSON.parse(JSON.stringify(data));
+	
+	element.href = serverSettings.host + ":" + serverSettings.port + "/users/" + element.id;
+	delete element.id;
+	
+	callback(element);
+}
 
  /****************************
  * Exports
