@@ -3,7 +3,7 @@
 Team-Mitglieder:
 * Aaron Wreschino
 * Natalie Tork Alinaghipour
-* Sergej Ebel (leaved)
+* Sergej Ebel (left the group)
 
 
 Mentoren:

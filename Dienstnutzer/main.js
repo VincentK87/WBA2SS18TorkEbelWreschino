@@ -7,12 +7,12 @@ const faye = require('faye');
 
 // settings to connect to server
 const settings = {
-	host: "http://localhost",
+	host: "https://wba2ss18.herokuapp.com",
 	port: 8080
 };
 
 // connect to faye server
-const client = new faye.Client(settings.host + ":" + settings.port + "/faye");
+const client = new faye.Client(settings.host + "/faye");
 
 // rl for input possability
 const rl = readline.createInterface({
@@ -347,7 +347,7 @@ function newRequest(methodD, res) {
 	
 	// request header
 	options = {
-		uri : settings.host + ":" + settings.port + "/" + res,
+		uri : settings.host + "/" + res,
 		method : methodD,
 		headers : {
 			"Content-Type" : "application/json"
