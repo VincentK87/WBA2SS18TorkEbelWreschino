@@ -227,7 +227,7 @@ function changeData(data, callback) {
 	delete element.id;
 
 	for(var i = 0; i < element.members.length; i++){
-		element.members[i] = serverSettings.host + ":" + serverSettings.port + "/users/" + element.members[i];
+		element.members[i] = serverSettings.host + "/users/" + element.members[i];
 		
 		if(i == element.members.length -1){
 			callback(element);
