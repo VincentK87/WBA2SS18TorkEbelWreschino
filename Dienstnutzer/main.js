@@ -42,7 +42,7 @@ var user = null;
 function startInput() {
 	
 	console.log("Hello !!!");
-	console.log("For information about the input possabilities type 'info'");
+	console.log("For information about the input possibilities type 'info'");
 	console.log("");
 	console.separate();
 
