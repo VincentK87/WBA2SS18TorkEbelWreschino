@@ -34,7 +34,7 @@ router.get('/', function(req, res){
 	]).then(function(gameData) {
 		var Obj;
 		gameData.body.forEach(function(element){
-			element.href = serverSettings.host + "/games/" + element.id
+			element.href = serverSettings.host + "games/" + element.id
 			delete element.id;
 		});
 		res.status(200).json(gameData.body);
