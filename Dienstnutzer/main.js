@@ -65,6 +65,10 @@ function startInput() {
 				//only for debug reasons
 				case "debug":
 					
+					var date = new Date();
+					date.setDate(date.getDate()+7);
+					console.log(date);
+					
 					// add everything here to debug the script 
 					break;
 				// Group search system
