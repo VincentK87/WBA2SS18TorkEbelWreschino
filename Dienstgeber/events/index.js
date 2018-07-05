@@ -11,8 +11,8 @@ const router = express.Router();
 const dbPath = "/events.json";
 
 // global variables
-var allEvents,
-    lastEventId;
+global.allEvents;
+var lastEventId;
 
 /** constructor for events
  * id: generates unique id for each object automatically
