@@ -12,6 +12,8 @@ var bayeux = new faye.NodeAdapter({mount: '/faye', timeout: 45});
 
 bayeux.attach(server);
 
+var faye_client = bayeux.getClient();
+
 global.serverSettings = {
 	host: "https://wba2ss18.herokuapp.com",
 	port: process.env.PORT || 8080
@@ -29,6 +31,10 @@ app.use("/games", games.router);
 app.use("/groups", groups.router);
 app.use("/events", events.router);
 app.use("/users", users.router);
+
+setInterval(function() {
+	console.log("test");
+}, 5000);
 
 // Load Databases sync
 async.waterfall([
