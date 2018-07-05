@@ -148,6 +148,22 @@ function startInput() {
 							console.separate
 							console.log(chalk.green("Logged in as:"));
 							outputData(data);
+							
+							// Subscribe User for all Event types
+							if(user.games.length != 0){
+								user.games.forEach(function(element){
+									if(element.tags.length != 0) {
+										element.tags.forEach(function(elem) {
+											client.subscribe('/Events/' + element.name + '/' + elem, function(message) {
+												console.separate();
+												console.log(chalk.blue('new Event for: ' + element.name));
+												console.log(message);
+												console.separate();
+											});
+										});
+									}
+								});
+							}
 						});
 					});
 					break;
