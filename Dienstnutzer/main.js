@@ -8,6 +8,7 @@ const faye = require('faye');
 // settings to connect to server
 const settings = {
 	host: "https://wba2ss18.herokuapp.com",
+//	host: "https://localhost/",
 	port: 8080
 };
 
