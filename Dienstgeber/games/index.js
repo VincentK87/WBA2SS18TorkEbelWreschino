@@ -27,7 +27,7 @@ router.get('/', function(req, res){
         limit: 50, // Limit to 20 results
         offset: 0, // Index offset for results
         order: 'release_dates.date:desc',
-        search: ''
+        search: 'ff'
     }, [
         'id',
         'name'
