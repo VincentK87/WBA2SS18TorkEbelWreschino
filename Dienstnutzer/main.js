@@ -77,7 +77,7 @@ function startInput() {
 						if(true) {
 						
 							// ask user what tags he is looking for 
-							rl.question('what tags for ' + game + '? ', function(tags) {
+							rl.question('what tags for ' + game + 'are you looking for? ', function(tags) {
 								
 								// check what tags the user entered
 								var tag = tags.split("/");
@@ -148,7 +148,7 @@ function startInput() {
 							console.separate
 							console.log(chalk.green("Logged in as:"));
 							outputData(data);
-							
+
 							// Subscribe User for all Event types
 							if(user.games.length != 0){
 								user.games.forEach(function(element){
@@ -163,7 +163,7 @@ function startInput() {
 										});
 									}
 								});
-							}
+							}						
 						});
 					});
 					break;
@@ -409,7 +409,7 @@ function sendRequest(callback) {
 						
 						client.publish('/'+ response.body.game + '/' + element, {
 							data: response.body
-						});
+						});	
 					});
 				};
 				

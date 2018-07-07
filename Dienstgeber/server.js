@@ -32,9 +32,24 @@ app.use("/groups", groups.router);
 app.use("/events", events.router);
 app.use("/users", users.router);
 
-setInterval(function() {
-	console.log("test");
-}, 5000);
+/*setInterval(function() {
+	for(var i = 0; i < allEvents.length; i++) {
+		if(allEvents.tags.length < 0) {
+			console.log("No tags to subscribe.");
+		} else {
+			for(var i = 0; i < data.tags.length; i++) {
+				if(data[i].tags == allUsers.games.tags) {
+					data[i].tags.forEach(function(element) {
+						if(tag.indexOf(element) > -1) {
+							console.log(data[i]);
+						}
+					});
+				}
+			}
+		}
+	}
+}, 5000);*/
+
 
 // Load Databases sync
 async.waterfall([
