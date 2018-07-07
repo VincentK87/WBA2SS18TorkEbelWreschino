@@ -27,6 +27,8 @@ var lastEventId;
 function Event(name, members, maxMem, queue, game, requ, tags) {
     this.id = lastEventId;
     this.name = name;
+	this.date = Date();
+	date.setDate(date.getDate()+3);
     this.members = members;
     this.maxMem = maxMem;
     this.queue = queue;
