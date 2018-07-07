@@ -160,7 +160,7 @@ function changeData(data, callback) {
 	
 	var element = JSON.parse(JSON.stringify(data));
 	
-	element.href = serverSettings.host + "users/" + element.id;
+	element.href = serverSettings.host + "/users/" + element.id;
 	delete element.id;
 	
 	callback(element);
