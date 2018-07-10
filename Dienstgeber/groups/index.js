@@ -223,7 +223,7 @@ function changeData(data, callback) {
 	
 	var element = JSON.parse(JSON.stringify(data));
 	
-	element.href = serverSettings.host + /*":" + serverSettings.port +*/ "/groups/" + element.id;
+	element.href = serverSettings.host + "/groups/" + element.id;
 	delete element.id;
 
 	for(var i = 0; i < element.members.length; i++){

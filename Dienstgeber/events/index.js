@@ -11,7 +11,7 @@ const router = express.Router();
 const dbPath = "/events.json";
 
 // global variables
-global.allEvents;
+    global.allEvents;
 var lastEventId;
 
 /** constructor for events
@@ -27,8 +27,8 @@ var lastEventId;
 function Event(name, members, maxMem, queue, game, requ, tags) {
     this.id = lastEventId;
     this.name = name;
-	this.date = Date();
-	date.setDate(date.getDate()+3);
+	this.date = new Date(year, month, day).getFullYear().getMonth().getDay();
+	//date.setDate(date.getDate()+3);
     this.members = members;
     this.maxMem = maxMem;
     this.queue = queue;
@@ -56,25 +56,41 @@ function Event(name, members, maxMem, queue, game, requ, tags) {
         allEvents.push(newEvent);
 
         // adds created event to the associated JSON file
-		changeData(newEvent, function(data){
+        changeData(newEvent, function(data){
 			res.send(data);
         });
+        
 	}
  });
 
- // gets a list of all the events
+ // gets a list of all events
  router.get('/', function(req, res) {
 
+    console.log("get start");
     // check if query parameter is set
     var tag = req.query.tag;
 
     if(tag == undefined) {
         // if no query parameter is set send all events
 		var data = [];
-		
+        
+        //set counter
 		var ct = 0;
 
-		for(var i = 0; i < allEvents.length; i++) {
+        console.log("get step 1")
+        // go through all events and change representation of the resource
+        allEvents.forEach(function(element) {
+            changeData(element, function(elem) {
+                data.push(elem);
+                ct++;
+                if(ct == allEvents.length) {
+                    console.log("get last step");
+                    res.send(data);
+                }
+            });
+        });
+        
+		/*for(var i = 0; i < allEvents.length; i++) {
 			ct++;
 			changeData(allEvents[i], function(elem) {
 				
@@ -84,9 +100,11 @@ function Event(name, members, maxMem, queue, game, requ, tags) {
 					res.send(data);
 				}
 			});
-		}
+        }
+        */
+        
     } else {
-        // if query parameter is set search all events for the query
+        // if query parameter is set search all events for the set query
         var tagList = [];
         allEvents.forEach(function(element) {
             element.tags.forEach(function(elem) {
@@ -98,7 +116,7 @@ function Event(name, members, maxMem, queue, game, requ, tags) {
             });
         });
 
-        // if element was not found return 404
+        // if element was not found return error 404
         if (tagList.length == 0) {
             res.sendStatus(404);
         } 
@@ -113,18 +131,18 @@ function Event(name, members, maxMem, queue, game, requ, tags) {
  router.get('/:eventID', function(req, res) {
 
     // ... by its id
-     var event = getEventById(req.params.eventID);
-
-     // in case the requested event is undefined return 404 error...
-     if (event == undefined) {
-         res.sendStatus(404);
-     } 
-     // ... otherwise send event 
-     else {
-		changeData(event, function(data){
-			res.send(data);
-		});
-     }
+     getEventById(req.params.eventID, function(event) {
+         // in case the requested event is undefined return 404 error...
+        if (event == undefined) {
+            res.sendStatus(404);
+        } 
+        // ... otherwise send event 
+        else {
+            changeData(event, function(data){
+                res.send(data);
+            });
+        }
+     });
  });
 
  // update information for a specific event
@@ -133,31 +151,32 @@ function Event(name, members, maxMem, queue, game, requ, tags) {
 
     // check if request contains valid data
     if (!checkIsValidForm(info)) {
+        // if request is invalid send 406 error
         res.sendStatus(406);
     } else {
-        // gets requested event
-        var event = getEventById(req.params.eventID);
+        // gets requested event when form is valid
+        getEventById(req.params.eventID, function(event) {
+                // if event does not exist return 404 error
+            if (event == undefined) {
+                res.sendStatus(404);
+                return;
+            }
 
-        // if event does not exist return 404 error
-        if (event == undefined) {
-            res.sendStatus(404);
-            return;
-        }
-
-        // if everything is in order, update the data 
-        event.name = info.name;
-        event.members = info.members;
-        event.maxMember = info.maxMem;
-        event.queue = info.queue;
-        event.game = info.game;
-        event.requirements = info.requirements;
-        event.tags = info.tags;
-        
-		changeData(event, function(data){
-			
-			// send the new event
-			res.send(data);
-		});
+            // if everything is in order, update the data 
+            event.name = info.name;
+            event.members = info.members;
+            event.maxMember = info.maxMem;
+            event.queue = info.queue;
+            event.game = info.game;
+            event.requirements = info.requirements;
+            event.tags = info.tags;
+            
+            changeData(event, function(data){
+                
+                // send the new event
+                res.send(data);
+            });
+        });
     }
  });
 
@@ -165,22 +184,23 @@ function Event(name, members, maxMem, queue, game, requ, tags) {
  router.delete('/:eventID', function(req, res) {
 
     // gets a specific event
-    var obj = getEventById(req.params.eventID);
+    getEventById(req.params.eventID, function(obj){
 
-    // if the requested event does not exist return 404 error 
-    if (obj == undefined) {
-        res.sendStatus(404);
-        return;
-    }
+        // if the requested event does not exist return 404 error 
+        if (obj == undefined) {
+            res.sendStatus(404);
+            return;
+        }
 
-    // gets the index of the object list
-    var index = allEvents.indexOf(obj);
-    
-    // removes the event and return 200 message
-    if (index > -1) {
-        allEvents.splice(index, 1);
-        res.sendStatus(200);
-    };
+        // gets the index of the object list
+        var index = allEvents.indexOf(obj);
+        
+        // removes the event and return 200 message
+        if (index > -1) {
+            allEvents.splice(index, 1);
+            res.sendStatus(200);
+        };
+    });
  });
 
 
@@ -189,10 +209,15 @@ function Event(name, members, maxMem, queue, game, requ, tags) {
  ****************************/
 
  // return id of requested event
- function getEventById(id) {
-     return allEvents.find(function(element) {
-        return element.id == id;
+ function getEventById(id, callback) {
+     allEvents.find(function(element) {
+         if(element.id == id) {
+             callback(element)
+         }
      });
+     /*return allEvents.find(function(element) {
+        return element.id == id;
+     });*/
  }
 
  // check if form of an event is acceptable
@@ -223,28 +248,31 @@ function Event(name, members, maxMem, queue, game, requ, tags) {
 
  }
  
- //attempt to check for existing users does not work yet...
+ /*//attempt to check for existing users does not work yet...
 hasUser = function (eventMember) {
     //global.allUsers.find(user => user.id === eventMember.id)
     if (eventMember in global.allUsers)
         // If the for loop ended and it did not find any match, return false
             return true;
     
- }
+ }*/
  
- // chenges the data to send to the user
+ // changes the data to send to the user
 // hides the ids and creates a hypermedia href
 function changeData(data, callback) {
-	
+    
+    console.log("changeData step 1");
 	var element = JSON.parse(JSON.stringify(data));
 	
-	element.href = serverSettings.host + ":" + serverSettings.port + "/events/" + element.id;
+	element.href = serverSettings.host + "/events/" + element.id;
 	delete element.id;
 
 	for(var i = 0; i < element.members.length; i++){
-		element.members[i] = serverSettings.host + "events/" + element.members[i];
+        console.log("changeData step 2");
+		element.members[i] = serverSettings.host + "/users/" + element.members[i];
 		
 		if(i == element.members.length -1){
+            console.log("changeData step 3");
 			callback(element);
 		}
 	}

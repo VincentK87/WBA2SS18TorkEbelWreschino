@@ -15,7 +15,8 @@ bayeux.attach(server);
 var faye_client = bayeux.getClient();
 
 global.serverSettings = {
-	host: "https://wba2ss18.herokuapp.com",
+	//host: "https://wba2ss18.herokuapp.com",
+	host: "https://localhost/",
 	port: process.env.PORT || 8080
 }
 // bodyparser for json being able to read
