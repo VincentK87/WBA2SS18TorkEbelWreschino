@@ -24,11 +24,11 @@ var lastEventId;
  * requ: requirements (string) for joining this event
  * tags: list of tags (strings) related to this event
 */
-function Event(name, members, maxMem, queue, game, requ, tags) {
+function Event(name, date, members, maxMem, queue, game, requ, tags) {    
     this.id = lastEventId;
     this.name = name;
-	this.date = new Date(year, month, day).getFullYear().getMonth().getDay();
-	//date.setDate(date.getDate()+3);
+    this.date = new Date().toJSON();
+    //this.date = today.setDate(today.getDate());
     this.members = members;
     this.maxMem = maxMem;
     this.queue = queue;
@@ -37,6 +37,18 @@ function Event(name, members, maxMem, queue, game, requ, tags) {
     this.tags = tags;
 
     lastEventId++;
+}
+
+testDate();
+
+function testDate() {
+    var now = new Date();
+    var year = now.getFullYear();
+    var month = now.getMonth();
+    var day = now.getDay();
+    console.log(day + "." + month + "." + year);
+    var jsonNow = now.toJSON();
+    console.log(jsonNow);
 }
 
  /****************************
@@ -52,7 +64,7 @@ function Event(name, members, maxMem, queue, game, requ, tags) {
         res.sendStatus(406);
     } else {
         // creates a new event 
-        var newEvent = new Event(event.name, event.members, event.maxMem, event.queue, event.game, event.requirements, event.tags);
+        var newEvent = new Event(event.name, event.date, event.members, event.maxMem, event.queue, event.game, event.requirements, event.tags);
         allEvents.push(newEvent);
 
         // adds created event to the associated JSON file
@@ -89,19 +101,6 @@ function Event(name, members, maxMem, queue, game, requ, tags) {
                 }
             });
         });
-        
-		/*for(var i = 0; i < allEvents.length; i++) {
-			ct++;
-			changeData(allEvents[i], function(elem) {
-				
-				data.push(elem);
-
-				if(ct == allEvents.length ){
-					res.send(data);
-				}
-			});
-        }
-        */
         
     } else {
         // if query parameter is set search all events for the set query
@@ -260,22 +259,25 @@ hasUser = function (eventMember) {
  // changes the data to send to the user
 // hides the ids and creates a hypermedia href
 function changeData(data, callback) {
-    
     console.log("changeData step 1");
 	var element = JSON.parse(JSON.stringify(data));
 	
 	element.href = serverSettings.host + "/events/" + element.id;
 	delete element.id;
-
-	for(var i = 0; i < element.members.length; i++){
-        console.log("changeData step 2");
-		element.members[i] = serverSettings.host + "/users/" + element.members[i];
-		
-		if(i == element.members.length -1){
-            console.log("changeData step 3");
-			callback(element);
-		}
-	}
+    if(element.members && element.members.length <= 0 || element.members == null) {
+        console.log("No members are attending this event yet.");
+    } else {
+        for(var i = 0; i < element.members.length; i++){
+            console.log("changeData step 2");
+            element.members[i] = serverSettings.host + "/users/" + element.members[i];
+            
+            if(i == element.members.length -1){
+                console.log("changeData step 3");
+                callback(element);
+            }
+        }
+    }
+	
 }
 
 
