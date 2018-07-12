@@ -15,8 +15,8 @@ bayeux.attach(server);
 var faye_client = bayeux.getClient();
 
 global.serverSettings = {
-	//host: "https://wba2ss18.herokuapp.com",
-	host: "https://localhost/",
+	host: "https://wba2ss18.herokuapp.com",
+//	host: "https://localhost/",
 	port: process.env.PORT || 8080
 }
 // bodyparser for json being able to read
@@ -33,24 +33,18 @@ app.use("/groups", groups.router);
 app.use("/events", events.router);
 app.use("/users", users.router);
 
-/*setInterval(function() {
-	for(var i = 0; i < allEvents.length; i++) {
-		if(allEvents.tags.length < 0) {
-			console.log("No tags to subscribe.");
-		} else {
-			for(var i = 0; i < data.tags.length; i++) {
-				if(data[i].tags == allUsers.games.tags) {
-					data[i].tags.forEach(function(element) {
-						if(tag.indexOf(element) > -1) {
-							console.log(data[i]);
-						}
-					});
-				}
+setInterval(function() {
+	for(let i = 0; i < allEvents.length; i++) {
+		if(allEvents[i].tags.length > 0) {
+			for(let j = 0; j < allEvents[i].tags.length; j++) {
+				faye_client.publish('/events/' + allEvents[i].game + '/' + allEvents[i].tags[j] , {
+					text : 'Event reminder !',
+					event : allEvents[i]
+				});
 			}
 		}
 	}
-}, 5000);*/
-
+}, 10000);
 
 // Load Databases sync
 async.waterfall([

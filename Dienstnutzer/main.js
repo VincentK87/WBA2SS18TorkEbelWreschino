@@ -8,8 +8,7 @@ const faye = require('faye');
 // settings to connect to server
 const settings = {
 	host: "https://wba2ss18.herokuapp.com",
-//	host: "https://localhost/",
-	port: 8080
+//	host: "http://localhost:8080",
 };
 
 // connect to faye server
@@ -155,10 +154,10 @@ function startInput() {
 								user.games.forEach(function(element){
 									if(element.tags.length != 0) {
 										element.tags.forEach(function(elem) {
-											client.subscribe('/Events/' + element.name + '/' + elem, function(message) {
+											client.subscribe('/events/' + element.name + '/' + elem, function(message) {
 												console.separate();
-												console.log(chalk.blue('new Event for: ' + element.name));
-												console.log(message);
+												console.log(chalk.blue('Incoming Message : ' + message.text));
+												console.log(message.event);
 												console.separate();
 											});
 										});
@@ -279,7 +278,10 @@ function newResource(method, resource) {
 			currentObj = AllObjects[resource];
 			
 			if ('members' in currentObj) {
-				currentObj.members.push(user.id);
+				
+				var cMem = user.href.split('/');
+				currentObj.members.push(cMem[cMem.length - 1]);
+				
 			}
 			
 			enterEditMode();
@@ -376,6 +378,7 @@ function newRequest(methodD, res) {
 function sendRequest(callback) {
 
 	request(options, function(err, response) {
+
 		// if request fails -> exit
 		console.separate();
 		if(err != null){

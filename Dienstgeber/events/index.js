@@ -46,9 +46,7 @@ function testDate() {
     var year = now.getFullYear();
     var month = now.getMonth();
     var day = now.getDay();
-    console.log(day + "." + month + "." + year);
     var jsonNow = now.toJSON();
-    console.log(jsonNow);
 }
 
  /****************************
@@ -78,7 +76,6 @@ function testDate() {
  // gets a list of all events
  router.get('/', function(req, res) {
 
-    console.log("get start");
     // check if query parameter is set
     var tag = req.query.tag;
 
@@ -89,14 +86,12 @@ function testDate() {
         //set counter
 		var ct = 0;
 
-        console.log("get step 1")
         // go through all events and change representation of the resource
         allEvents.forEach(function(element) {
             changeData(element, function(elem) {
                 data.push(elem);
                 ct++;
                 if(ct == allEvents.length) {
-                    console.log("get last step");
                     res.send(data);
                 }
             });
@@ -259,21 +254,20 @@ hasUser = function (eventMember) {
  // changes the data to send to the user
 // hides the ids and creates a hypermedia href
 function changeData(data, callback) {
-    console.log("changeData step 1");
+
 	var element = JSON.parse(JSON.stringify(data));
 	
 	element.href = serverSettings.host + "/events/" + element.id;
 	delete element.id;
     if(element.members && element.members.length <= 0 || element.members == null) {
-        console.log("No members are attending this event yet.");
+		//console.log("No members are attending this event yet.");
+		callback(element);
     } else {
         for(var i = 0; i < element.members.length; i++){
-            console.log("changeData step 2");
             element.members[i] = serverSettings.host + "/users/" + element.members[i];
             
             if(i == element.members.length -1){
-                console.log("changeData step 3");
-                callback(element);
+				callback(element);
             }
         }
     }
