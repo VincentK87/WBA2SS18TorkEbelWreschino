@@ -75,10 +75,10 @@ function getReleasedGames() {
             'release_dates.date-gt': '1997-01-01',
             'release_dates.date-lt': '2005-12-31'
         },
-        limit: 10,
+        limit: 2,
         offset: 0,
         order: 'release_dates.date:desc',
-        search: 'ff'
+        search: 'ffxv'
     }, [
         'name',
         'release_dates.date',
