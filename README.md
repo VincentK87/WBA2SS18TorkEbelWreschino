@@ -17,4 +17,4 @@ Professor:
 # Links
 
 * [WIKI](https://github.com/plunata/WBA2SS18TorkEbelWreschino/wiki)  
-* [API Dokumentation](https://github.com/plunata/WBA2SS18TorkEbelWreschino/wiki/API-Dokumentation)  
+* [API Dokumentation](https://github.com/plunata/WBA2SS18TorkEbelWreschino/wiki/Anhang-3:-API-Dokumentation)  
